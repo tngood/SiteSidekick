@@ -1320,3 +1320,138 @@ document.querySelector('#home-link').addEventListener('click', event => {
   event.preventDefault()
   resetSession()
 })
+
+/* =========================================================
+   SiteSidekick: Optional Meta AI Companion
+   Preserves existing troubleshooting, history, and handoff.
+   Live AI remains controlled by the backend's AI_ENABLED flag.
+   ========================================================= */
+
+let siteSidekickAIAvailable = false
+let siteSidekickAIRequestPending = false
+
+async function checkSiteSidekickAI() {
+  try {
+    const response = await fetch('/api/health')
+
+    if (!response.ok) {
+      throw new Error('Backend unavailable')
+    }
+
+    const health = await response.json()
+
+    siteSidekickAIAvailable =
+      health.configured === true &&
+      health.aiEnabled === true
+  } catch {
+    siteSidekickAIAvailable = false
+  }
+
+  if (activeConversation && !resultPanel.hidden) {
+    showSiteSidekickAI(activeConversation)
+  }
+}
+
+function showSiteSidekickAI(conversation) {
+  const existingPanel = resultPanel.querySelector('#ai-companion')
+
+  if (existingPanel) existingPanel.remove()
+
+  if (
+    !siteSidekickAIAvailable ||
+    isHighRisk(conversation) ||
+    wantsProfessionalHelp(conversation)
+  ) {
+    return
+  }
+
+  const panel = document.createElement('div')
+  panel.id = 'ai-companion'
+  panel.className = 'notice'
+
+  panel.innerHTML = `
+    <strong>Optional AI guidance</strong>
+
+    <p>
+      Ask SiteSidekick AI for additional guidance about
+      your website issue. This uses a Meta API request.
+    </p>
+
+    <button
+      type="button"
+      class="secondary-button"
+      id="ask-sitesidekick-ai"
+    >
+      Ask SiteSidekick AI
+    </button>
+
+    <div id="sitesidekick-ai-response" aria-live="polite"></div>
+  `
+
+  resultPanel.appendChild(panel)
+
+  const button = panel.querySelector('#ask-sitesidekick-ai')
+  const output = panel.querySelector('#sitesidekick-ai-response')
+
+  button.addEventListener('click', async () => {
+    if (siteSidekickAIRequestPending) return
+
+    siteSidekickAIRequestPending = true
+    button.disabled = true
+    button.textContent = 'Waiting for AI...'
+    output.textContent = ''
+
+    const messages = [
+      {
+        role: 'user',
+        content: conversationSummary(conversation).slice(0, 4000)
+      }
+    ]
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ messages })
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'AI is unavailable.')
+      }
+
+      if (typeof data.reply !== 'string') {
+        throw new Error('Unexpected AI response.')
+      }
+
+      const paragraph = document.createElement('p')
+      paragraph.style.whiteSpace = 'pre-wrap'
+      paragraph.textContent = data.reply
+
+      output.replaceChildren(paragraph)
+    } catch (error) {
+      output.textContent =
+        error.message ||
+        'AI is unavailable. Guided troubleshooting still works.'
+    } finally {
+      siteSidekickAIRequestPending = false
+      button.disabled = false
+      button.textContent = 'Ask SiteSidekick AI'
+    }
+  })
+}
+
+// Extend the existing conversation display without replacing it.
+const originalSiteSidekickRenderConversation = renderConversation
+
+renderConversation = function (conversation) {
+  originalSiteSidekickRenderConversation(conversation)
+  showSiteSidekickAI(conversation)
+}
+
+// Check the local backend without contacting Meta.
+checkSiteSidekickAI()
+
