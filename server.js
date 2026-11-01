@@ -15,7 +15,7 @@ app.use(express.json({ limit: '20kb' }));
 const AI_ENABLED = process.env.AI_ENABLED === 'true';
 const MAX_SESSION_REQUESTS = 5;
 const MAX_DAILY_REQUESTS = 10;
-const MAX_OUTPUT_TOKENS = 300;
+const MAX_OUTPUT_TOKENS = 2000;
 
 const USAGE_FILE = path.join(process.cwd(), '.sitesidekick-usage.json');
 
@@ -174,40 +174,97 @@ app.post('/api/chat', async (req, res) => {
           Authorization: `Bearer ${process.env.META_API_KEY}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          model: process.env.META_MODEL,
-          messages: [
-            { role: 'system', content: SYSTEM_PROMPT },
-            ...messages
-          ],
-          temperature: 0.3,
-          max_tokens: MAX_OUTPUT_TOKENS
-        }),
+        
+      body: JSON.stringify({
+  model: process.env.META_MODEL,
+  reasoning_effort: 'minimal',
+  messages: [
+    { role: 'system', content: SYSTEM_PROMPT },
+    ...messages
+  ],
+  max_completion_tokens: MAX_OUTPUT_TOKENS
+}),
         signal: AbortSignal.timeout(30000)
       }
     );
 
+
     const data = await response.json();
 
     if (!response.ok) {
-      console.error('Meta API request failed:', response.status);
+      const safeErrorDetails = {
+        status: response.status,
+        errorType:
+          typeof data?.error?.type === 'string'
+            ? data.error.type
+            : 'Not provided',
+        errorCode:
+          typeof data?.error?.code === 'string' ||
+          typeof data?.error?.code === 'number'
+            ? data.error.code
+            : 'Not provided'
+      };
+
+      console.error('Meta API request failed:', safeErrorDetails);
 
       return res.status(502).json({
         error: 'Meta AI could not complete the request.'
       });
     }
+console.log('Meta token diagnostics:', {
+  finishReason: data.choices?.[0]?.finish_reason ?? null,
+  promptTokens: data.usage?.prompt_tokens ?? null,
+  completionTokens: data.usage?.completion_tokens ?? null,
+  totalTokens: data.usage?.total_tokens ?? null,
+  completionDetails: data.usage?.completion_tokens_details ?? null,
+  contentLength:
+    typeof data.choices?.[0]?.message?.content === 'string'
+      ? data.choices[0].message.content.length
+      : null
+});
+const content = data.choices?.[0]?.message?.content;
 
-    const reply = data.choices?.[0]?.message?.content;
+const reply =
+  typeof content === 'string'
+    ? content
+    : Array.isArray(content)
+      ? content
+          .filter(part => part?.type === 'text' && typeof part.text === 'string')
+          .map(part => part.text)
+          .join('\n')
+      : typeof content?.text === 'string'
+        ? content.text
+        : '';
 
-    if (typeof reply !== 'string' || !reply.trim()) {
-      return res.status(502).json({
-        error: 'Meta AI returned an unexpected response.'
-      });
-    }
+if (typeof reply !== 'string' || !reply.trim()) {
+  console.error('Meta unexpected response structure:', {
+    responseKeys: Object.keys(data ?? {}),
+    choicesIsArray: Array.isArray(data?.choices),
+    choicesCount: Array.isArray(data?.choices)
+      ? data.choices.length
+      : null,
+    firstChoiceKeys: data?.choices?.[0]
+      ? Object.keys(data.choices[0])
+      : [],
+    messageKeys: data?.choices?.[0]?.message
+      ? Object.keys(data.choices[0].message)
+      : [],
+    contentType: typeof reply,
+    finishReason: data?.choices?.[0]?.finish_reason ?? null
+  });
+
+  return res.status(502).json({
+    error: 'Meta AI returned an unexpected response.'
+  });
+}
 
     res.json({ reply });
   } catch (error) {
-    console.error('Meta connection error:', error.message);
+   console.error('Meta connection error:', {
+  message: error.message,
+  causeCode: error.cause?.code,
+  causeMessage: error.cause?.message
+});
 
     res.status(502).json({
       error: 'Unable to connect to Meta AI right now.'

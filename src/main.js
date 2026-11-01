@@ -1,6 +1,8 @@
 
 import './style.css'
 import { knowledgeBase } from './knowledge-base.js'
+import { marked } from 'marked'
+import DOMPurify from 'dompurify'
 
 document.querySelector('#app').innerHTML = `
   <div class="app-shell">
@@ -11,9 +13,12 @@ document.querySelector('#app').innerHTML = `
       </a>
 
       <button class="new-issue" id="new-issue">+ New troubleshooting session</button>
-      <p class="nav-label">WORKSPACE</p>
-      <a class="nav-link active" href="#home" id="overview-link">Overview</a>
-      <a class="nav-link" href="#history" id="history-link">Issue history</a>
+     <p class="nav-label">WORKSPACE</p>
+<a class="nav-link active" href="#home" id="overview-link">Overview</a>
+<a class="nav-link" href="#history" id="history-link">Issue history</a>
+
+<p class="nav-label">INFORMATION</p>
+<a class="nav-link" href="#legal" id="legal-link">Legal &amp; Privacy</a>
 
       <div class="sidebar-bottom">
         <div class="help-card">
@@ -42,15 +47,85 @@ document.querySelector('#app').innerHTML = `
         <p class="intro">Describe what's going wrong. We'll help you narrow down the possible causes and build a clear plan to address it.</p>
       </section>
 
-      <section class="issue-panel" id="issue-panel">
-        <label for="issue-input">What would you like help with?</label>
-        <textarea id="issue-input" rows="4" placeholder="For example: My WordPress website looks broken on mobile, but looks fine on desktop..."></textarea>
-        <div class="input-footer">
-          <span>Share what you see and when it started.</span>
-          <button id="start-button">Start troubleshooting →</button>
-        </div>
-        <p class="form-error" id="form-error" role="alert"></p>
-      </section>
+     
+<section class="issue-panel" id="issue-panel">
+  <label for="issue-input">What would you like help with?</label>
+
+  <div class="ssk-business-option">
+    <button
+      type="button"
+      id="ssk-business-guide-button"
+      aria-expanded="false"
+      aria-controls="ssk-business-guide"
+    >
+      <strong>I'm Not Sure What My Business Needs</strong>
+      <span>
+        Not sure whether to start with a website, social media,
+        online booking, or selling online? Explore your options.
+      </span>
+    </button>
+
+    <div id="ssk-business-guide" hidden>
+      <h3>Let's Find Your Starting Point</h3>
+
+      <p>
+        You don't need every digital tool on day one.
+        Start with what helps customers find, trust, and
+        contact your business.
+      </p>
+
+      <div class="ssk-business-guide-content">
+        <h4>Start with the essentials</h4>
+        <p>
+          Make sure your business has accurate contact information,
+          a clear description of what you offer, and a reliable
+          way for customers to reach you.
+        </p>
+
+        <h4>Do I need a website?</h4>
+        <p>
+          A website gives your business a central place to explain
+          services, answer common questions, and build credibility.
+          A simple website or landing page may be enough to start.
+        </p>
+
+        <h4>What about social media?</h4>
+        <p>
+          Social media can help customers discover your business
+          and see recent updates. Choose platforms where your
+          customers are active rather than trying to manage them all.
+        </p>
+
+        <h4>Do I need online booking or selling?</h4>
+        <p>
+          If customers need to schedule appointments or purchase
+          products, consider adding those features when they
+          support how your business operates.
+        </p>
+      </div>
+
+      <p>
+        <strong>SiteSidekick tip:</strong>
+        Start with your customers' most important needs.
+        You can expand your digital presence as your business grows.
+      </p>
+    </div>
+  </div>
+
+  <textarea
+    id="issue-input"
+    rows="4"
+    placeholder="For example: My WordPress website looks broken on mobile, but looks fine on desktop..."
+  ></textarea>
+
+  <div class="input-footer">
+    <span>Share what you see and when it started.</span>
+    <button id="start-button">Start troubleshooting →</button>
+  </div>
+
+  <p class="form-error" id="form-error" role="alert"></p>
+</section>
+
 
       <section class="suggestions" id="suggestions-section">
         <h2>Common starting points</h2>
@@ -83,10 +158,61 @@ document.querySelector('#app').innerHTML = `
 
       <section class="troubleshoot-result" id="result-panel" hidden aria-live="polite"></section>
       <section class="troubleshoot-result" id="history-panel" hidden aria-live="polite"></section>
+      <section
+  class="troubleshoot-result ssk-legal-panel"
+  id="legal-panel"
+  aria-labelledby="ssk-legal-title"
+  hidden
+></section>
 
-      <footer class="page-footer">
-        SiteSidekick <span>Practical guidance for your website.</span>
-      </footer>
+     <footer class="page-footer" aria-label="SiteSidekick information and legal notices">
+  <div class="ssk-footer-brand">
+    <strong>SiteSidekick</strong>
+    <p>Website troubleshooting made simple.</p>
+    <p class="ssk-footer-credit">
+      Developed by TB Designs · AI assistance powered by Meta Muse Wonder
+    </p>
+  </div>
+
+  <div class="ssk-footer-legal">
+    <h2>Legal &amp; Privacy</h2>
+
+    <nav aria-label="Legal information">
+      <a href="#ssk-privacy">Privacy Policy</a>
+      <a href="#ssk-terms">Terms of Use</a>
+      <a href="#ssk-ai-disclosure">AI Disclosure</a>
+      <a href="#ssk-disclaimer">Website Troubleshooting Disclaimer</a>
+      <a href="#ssk-cookies">Cookies &amp; Analytics</a>
+     <a
+  href="https://dev.meta.ai/legal"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  Meta AI Legal Documents ↗
+</a>
+    </nav>
+  </div>
+
+  <div class="ssk-footer-notice">
+    <p>
+      <strong>Important:</strong>
+      SiteSidekick provides general website troubleshooting guidance.
+      AI-generated information may be inaccurate and does not constitute
+      a confirmed technical diagnosis.
+    </p>
+
+    <p>
+      Do not submit passwords, API keys, financial information,
+      or other sensitive personal information.
+    </p>
+  </div>
+
+  <p class="ssk-footer-copyright">
+    &copy; 2026 TB Designs. SiteSidekick is an independently developed
+    application using Meta AI technology. It is not affiliated with
+    or endorsed by Meta.
+  </p>
+</footer>
     </main>
   </div>
 `
@@ -101,7 +227,8 @@ const welcomeSection = document.querySelector('#welcome-section')
 const breadcrumbPage = document.querySelector('#breadcrumb-page')
 const overviewLink = document.querySelector('#overview-link')
 const historyLink = document.querySelector('#history-link')
-
+const legalLink = document.querySelector('#legal-link')
+const legalPanel = document.querySelector('#legal-panel')
 const STORAGE_KEY = 'sitesidekick-sessions-v1'
 const SUPPORT_EMAIL = 'tabathabierie@gmail.com'
 let activeConversation = null
@@ -146,16 +273,25 @@ function saveSessions(sessions) {
 
 function setView(view) {
   const showingHistory = view === 'history'
+  const showingLegal = view === 'legal'
+  const showingOverview = !showingHistory && !showingLegal
 
   historyPanel.hidden = !showingHistory
+  legalPanel.hidden = !showingLegal
   resultPanel.hidden = true
-  issuePanel.hidden = showingHistory
-  suggestionsSection.hidden = showingHistory
-  welcomeSection.hidden = showingHistory
 
-  breadcrumbPage.textContent = showingHistory ? 'Issue history' : 'Overview'
-  overviewLink.classList.toggle('active', !showingHistory)
+  issuePanel.hidden = !showingOverview
+  suggestionsSection.hidden = !showingOverview
+  welcomeSection.hidden = !showingOverview
+
+  breadcrumbPage.textContent =
+    showingHistory ? 'Issue history' :
+    showingLegal ? 'Legal & Privacy' :
+    'Overview'
+
+  overviewLink.classList.toggle('active', showingOverview)
   historyLink.classList.toggle('active', showingHistory)
+  legalLink.classList.toggle('active', showingLegal)
 
   if (!showingHistory) historyPanel.innerHTML = ''
 }
@@ -386,10 +522,61 @@ function getConversationType(description) {
 
 function nextQuestion(conversation) {
   const questions = questionSets[conversation.type]
+  const description = conversation.description.toLowerCase()
+
+  // Recognize details the customer already shared.
+  const mobileMentioned =
+    /\b(mobile|phone|phones|iphone|android|smartphone|cellphone)\b/i.test(description)
+
+  const desktopMentioned =
+    /\b(desktop|laptop|computer|pc)\b/i.test(description)
+
+  const mobileProblem =
+    mobileMentioned &&
+    (
+      /\b(only|just|fine on|works on|looks fine|looks okay|looks ok)\b/i.test(description) ||
+      desktopMentioned
+    )
+
+  const recentChange =
+    /\b(after|since|following|when i|yesterday|today|last night|recently)\b/i.test(description) &&
+    /\b(updated?|changed?|added?|uploaded?|replaced?|installed?|edited?|removed?|pictures?|photos?|images?|plugins?|themes?|content|menu)\b/i.test(description)
+
+  const ongoingProblem =
+    /\b(for weeks|for months|for years|always been|long time)\b/i.test(description)
+
+  const suddenProblem =
+    /\b(suddenly|out of nowhere|all of a sudden)\b/i.test(description)
 
   for (let i = conversation.step; i < questions.length; i++) {
-    if (!questions[i].when || questions[i].when(conversation.answers)) {
-      return { index: i, question: questions[i] }
+    const question = questions[i]
+
+    if (conversation.type === 'general') {
+      if (i === 0 && mobileProblem) {
+        conversation.answers[0] = 'mobile'
+        continue
+      }
+
+      if (i === 1) {
+        if (recentChange) {
+          conversation.answers[1] = 'recent'
+          continue
+        }
+
+        if (ongoingProblem) {
+          conversation.answers[1] = 'ongoing'
+          continue
+        }
+
+        if (suddenProblem) {
+          conversation.answers[1] = 'sudden'
+          continue
+        }
+      }
+    }
+
+    if (!question.when || question.when(conversation.answers)) {
+      return { index: i, question }
     }
   }
 
@@ -429,40 +616,154 @@ function wantsProfessionalHelp(conversation) {
   return conversation.answers.includes('help')
 }
 
+/*
+ * Developer summary.
+ * Preserve the customer's actual findings.
+ */
+/*
+ * Developer summary.
+ * Preserve the customer's actual findings.
+ * Format the information for a professional support handoff.
+ */
 function conversationSummary(conversation) {
-  const lines = [`Original concern: ${conversation.description}`]
+  const lines = [
+    'SITESIDEKICK | WEBSITE SUPPORT REQUEST',
+    '===================================',
+    '',
+    '1. WEBSITE ISSUE',
+    conversation.description || 'No description provided.',
+    '',
+    '2. TROUBLESHOOTING QUESTIONS & ANSWERS'
+  ]
 
-  for (const entry of conversation.transcript) {
-    lines.push(`${entry.question} ${entry.answer}`)
+  const transcript = conversation.transcript || []
+
+  if (transcript.length) {
+    for (const entry of transcript) {
+      lines.push(`Question: ${entry.question}`)
+      lines.push(`Answer: ${entry.answer}`)
+      lines.push('')
+    }
+  } else {
+    lines.push('No troubleshooting questions recorded.', '')
   }
 
-  if (conversation.checkResults?.length) {
-    lines.push('', 'Initial website checks:')
+  lines.push('3. INITIAL WEBSITE CHECKS')
 
-    for (const result of conversation.checkResults) {
+  const checks = conversation.checkResults || []
+
+  if (checks.length) {
+    for (const result of checks) {
       const status =
         result.answer === 'yes' ? 'Completed' :
         result.answer === 'no' ? 'Not completed' :
-        'Requested professional help'
+        result.answer === 'help' ? 'Requested professional help' :
+        result.answer === 'skip' ? 'Not checked' :
+        'Finding recorded'
 
-      lines.push(`${result.topic}: ${status}`)
+      lines.push(`${result.topic}: ${result.finding || status}`)
     }
+  } else {
+    lines.push('No initial checks recorded.')
   }
 
-  if (conversation.finalStatus) {
-    lines.push('', `Customer's current status: ${conversation.finalStatus}`)
-  }
-
-  lines.push('', 'The underlying cause has not been confirmed.')
+  lines.push(
+    '',
+    '4. CURRENT STATUS',
+    conversation.finalStatus || 'Not specified.',
+    '',
+    '5. RECOMMENDED NEXT STEPS',
+    'The underlying cause has not been confirmed.',
+    'Please review the reported issue and troubleshooting findings before recommending changes.',
+    '',
+    '6. ADDITIONAL INFORMATION',
+    'Website URL: [To be provided]',
+    'Affected page(s): [To be provided]',
+    'Screenshots: [Attach if available]',
+    'Device/browser details: [To be provided]',
+    '',
+   'REPORT INFORMATION',
+'Prepared by SiteSidekick',
+'A website troubleshooting assistant developed by TB Designs.',
+'',
+'This report documents customer-provided information and troubleshooting findings.',
+'The underlying technical cause has not been independently verified.'
+  )
 
   return lines.join('\n')
 }
+
 
 function conversationOutcome(conversation) {
   if (isHighRisk(conversation)) {
     return {
       title: 'This issue needs professional attention',
       message: 'Your answers suggest a potentially serious website problem. Contact your website developer or hosting provider. Avoid changing live website files, plugins, or settings without a recovery plan.',
+      resolved: false
+    }
+  }
+
+  const checks = conversation.checkResults || []
+  const finalStatus = conversation.finalStatus || ''
+
+  const findCheck = topic =>
+    checks.find(check => check.topic === topic)
+
+  const phoneCheck = findCheck('Compare another phone')
+  const privateCheck = findCheck('Check a private browser window')
+  const refreshCheck = findCheck('Refresh the affected page')
+
+  const customerResolved =
+    finalStatus === 'Customer reports that the problem is no longer occurring'
+
+  const customerStillNeedsHelp =
+    finalStatus === 'Customer still needs help after completing initial checks'
+
+  const customerPartiallyResolved =
+    finalStatus === 'Some improvement, but the customer still has concerns'
+
+  if (customerResolved) {
+    return {
+      title: 'Your website appears to be working again',
+      message: 'You reported that the problem is no longer occurring. Your troubleshooting findings have been saved. The underlying cause has not been confirmed, so keep an eye on the affected pages and contact your developer if the issue returns.',
+      resolved: true
+    }
+  }
+
+  if (customerStillNeedsHelp || customerPartiallyResolved) {
+    const findings = []
+
+    if (phoneCheck?.answer === 'both') {
+      findings.push('The problem appears on more than one phone.')
+    } else if (phoneCheck?.answer === 'one') {
+      findings.push('The problem was reported on only one of the phones tested.')
+    }
+
+    if (privateCheck?.answer === 'still') {
+      findings.push('The problem also occurs in a private browser window.')
+    } else if (privateCheck?.answer === 'normal') {
+      findings.push('The page appears normal in a private browser window.')
+    }
+
+    if (refreshCheck?.answer === 'still') {
+      findings.push('Refreshing did not resolve the problem.')
+    } else if (refreshCheck?.answer === 'fixed') {
+      findings.push('Refreshing improved or resolved the problem during that check.')
+    }
+
+    const introduction = customerPartiallyResolved
+      ? 'You reported some improvement, but concerns remain.'
+      : 'You reported that the website problem is still occurring.'
+
+    const findingsText = findings.length
+      ? ` ${findings.join(' ')}`
+      : ''
+
+    return {
+      title: customerPartiallyResolved
+        ? 'Some website concerns still need attention'
+        : 'Your website issue still needs attention',
+      message: `${introduction}${findingsText} The underlying cause has not been confirmed. Share these findings and your troubleshooting summary with your website developer for further investigation.`,
       resolved: false
     }
   }
@@ -508,6 +809,7 @@ function conversationOutcome(conversation) {
     resolved: false
   }
 }
+
 
 /*
  * Update an existing session instead of creating another copy.
@@ -561,6 +863,33 @@ function buildSelfHelpChecks(conversation) {
   }
 
   const isReview = conversation.type === 'review'
+
+  // Mobile layout problems
+  const mobileIssue =
+    /\b(mobile|phone|phones|iphone|android|smartphone)\b/i.test(issue) &&
+    /\b(layout|menu|image|images|picture|pictures|photo|photos|spacing|design|looks|display|broken|messed up|wrong)\b/i.test(issue)
+
+  if (mobileIssue) {
+    add(
+      'Compare another phone',
+      'If another phone is available, open the affected page on it. Does the layout look wrong there too? If you do not have another phone, you can skip this check.',
+      'You have compared how the page appears on another device.'
+    )
+
+    add(
+      'Check a private browser window',
+      'Open the same page in a private or incognito browser window on your phone. Does the layout still look wrong? You do not need to change any website settings.',
+      'You have checked whether the problem also appears in a private browser window.'
+    )
+
+    add(
+      'Refresh the affected page',
+      'Refresh the affected page on your phone and compare the layout again. Do not edit or remove any pictures, plugins, or website settings.',
+      'You have checked whether refreshing changes what appears on the page.'
+    )
+
+    return checks
+  }
 
   if (
     /old|outdated|design|redesign|refresh|modern/.test(issue) ||
@@ -621,136 +950,86 @@ function buildSelfHelpChecks(conversation) {
   return checks.slice(0, 3)
 }
 
-/*
- * Opens a preaddressed email draft.
- * Some browsers require a configured default email application.
- * A Gmail compose link is offered as a fallback.
- */
-function buildEmailDetails(summary) {
-  const subject = 'SiteSidekick Website Assistance Request'
-  const body = `Hello TB Designs,
-
-I would like professional help with my website.
-
-${summary}
-
-Please let me know the next steps.`
-
-  const mailto = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-
-  const gmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(SUPPORT_EMAIL)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-
-  return { mailto, gmail }
-}
-
-function openEmailDraft(summary, container = null) {
-  const details = buildEmailDetails(summary)
-
-  /*
-   * Show an alternate link before attempting the email application.
-   * Browsers cannot reliably tell us whether mailto succeeded.
-   */
-  if (container) {
-    const existing = container.querySelector('.email-fallback')
-    if (existing) existing.remove()
-
-    const fallback = document.createElement('div')
-    fallback.className = 'notice email-fallback'
-
-    fallback.innerHTML = `
-      <strong>Ready to request assistance</strong>
-      <p>
-        The email is addressed to
-        <strong>${escapeHTML(SUPPORT_EMAIL)}</strong>
-        with your website summary included.
-      </p>
-      <p>
-        If your email application does not open, use the Gmail option below.
-      </p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;">
-        <a class="secondary-button" href="${escapeHTML(details.gmail)}" target="_blank" rel="noopener noreferrer">
-          Open Draft in Gmail
-        </a>
-        <a class="secondary-button" href="${escapeHTML(details.mailto)}">
-          Try Email Application Again
-        </a>
-      </div>
-      <p>No email has been sent automatically.</p>
-    `
-
-    container.appendChild(fallback)
-  }
-
-  window.location.href = details.mailto
-}
+/* Developer handoff */
 
 async function copySummary(textarea) {
+  const text = textarea.value
+
   try {
-    await navigator.clipboard.writeText(textarea.value)
-    alert('Summary copied. You can paste it into an email to your developer.')
+    await navigator.clipboard.writeText(text)
+    alert('Your developer summary has been copied.')
   } catch {
+    textarea.focus()
     textarea.select()
-    alert('Copy the highlighted summary to share it with your developer.')
+    alert('Select and copy the highlighted summary.')
   }
 }
 
-function showSelfHelp(conversation, container) {
-  const checks = isHighRisk(conversation)
-    ? []
-    : buildSelfHelpChecks(conversation)
+function openEmailDraft(summary, container) {
+  const subject = 'Website support request - SiteSidekick'
+  const body = encodeURIComponent(summary)
 
+  container.innerHTML = `
+    <div class="notice">
+      <strong>Get professional website help</strong>
+      <p>You can open an email draft containing your troubleshooting summary. No message is sent automatically.</p>
+      <a
+        class="secondary-button"
+        href="mailto:${escapeHTML(SUPPORT_EMAIL)}?subject=${encodeURIComponent(subject)}&body=${body}"
+      >
+        Open email draft
+      </a>
+    </div>
+  `
+}
+
+/*
+ * Guided self-help.
+ * Collects actual findings from mobile troubleshooting checks.
+ */
+function showSelfHelp(conversation, container) {
+  const checks = isHighRisk(conversation) ? [] : buildSelfHelpChecks(conversation)
   const results = [...(conversation.checkResults || [])]
   let index = results.length
 
   function updateResults() {
-    conversation.checkResults = [...results]
+    conversation.checkResults = results
     saveConversation(conversation)
   }
 
   function showDeveloperHandoff(title, message) {
-    conversation.finalStatus = title
+    conversation.finalStatus =
+      conversation.finalStatus || 'Professional assistance recommended'
+
     updateResults()
 
     container.innerHTML = `
       <div class="notice">
         <strong>${escapeHTML(title)}</strong>
         <p>${escapeHTML(message)}</p>
-        <p>
-          These checks do not confirm the underlying cause.
-          Avoid changing live website settings, plugins, themes,
-          or code without a backup and recovery plan.
-        </p>
       </div>
 
-      <label for="self-help-summary">
-        Your developer summary (you can make changes)
-      </label>
-
+      <label for="self-help-summary">Your developer summary</label>
       <textarea id="self-help-summary" rows="10">${escapeHTML(conversationSummary(conversation))}</textarea>
 
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin:14px 0;">
         <button type="button" class="secondary-button" id="self-help-copy">
-          Share With My Developer
+          Share This With My Developer
         </button>
 
-        <button type="button" class="secondary-button" id="self-help-professional">
+        <button type="button" class="secondary-button" id="self-help-contact">
           Get Professional Help
         </button>
       </div>
 
       <div id="self-help-email-options"></div>
-
-      <p class="plan-intro">
-        SiteSidekick has not inspected or modified your website.
-        No assistance request has been submitted.
-      </p>
     `
 
     container.querySelector('#self-help-copy').addEventListener('click', () => {
       copySummary(container.querySelector('#self-help-summary'))
     })
 
-    container.querySelector('#self-help-professional').addEventListener('click', () => {
+    container.querySelector('#self-help-contact').addEventListener('click', () => {
       openEmailDraft(
         container.querySelector('#self-help-summary').value,
         container.querySelector('#self-help-email-options')
@@ -759,63 +1038,65 @@ function showSelfHelp(conversation, container) {
   }
 
   function finishChecks() {
+    const refreshFixed = results.some(
+      result =>
+        result.topic === 'Refresh the affected page' &&
+        result.answer === 'fixed'
+    )
+
     container.innerHTML = `
       <div class="notice">
-        <strong>You've completed your initial website checks.</strong>
-        <p>
-          You've gathered useful information about your website.
-          These checks help identify where problems may exist,
-          but they do not necessarily resolve them.
-        </p>
-        <p><strong>Are you still experiencing these problems?</strong></p>
+        <strong>${refreshFixed
+          ? 'Refreshing appears to have fixed the problem.'
+          : 'You have completed the initial website checks.'}</strong>
+        <p>${refreshFixed
+          ? 'The layout now appears normal after refreshing. We will record that result, but the underlying cause has not been confirmed.'
+          : 'We have recorded what you found. Are you still experiencing these problems?'}</p>
       </div>
 
-      <div style="display:grid;gap:10px;margin:14px 0;">
-        <button type="button" class="secondary-button" data-status="yes">
+      <div style="display:grid;gap:10px;margin:12px 0;">
+        <button type="button" class="secondary-button" data-final="resolved">
+          No, everything is working now
+        </button>
+
+        <button type="button" class="secondary-button" data-final="some">
+          Some things improved, but I still have problems
+        </button>
+
+        <button type="button" class="secondary-button" data-final="unresolved">
           Yes, I still need help
-        </button>
-
-        <button type="button" class="secondary-button" data-status="some">
-          Some things have improved
-        </button>
-
-        <button type="button" class="secondary-button" data-status="no">
-          No, everything seems to be working
         </button>
       </div>
     `
 
-    container.querySelectorAll('[data-status]').forEach(button => {
+    container.querySelectorAll('[data-final]').forEach(button => {
       button.addEventListener('click', () => {
-        const status = button.dataset.status
+        const answer = button.dataset.final
 
-        if (status === 'no') {
-          conversation.finalStatus = 'Customer reports everything seems to be working'
-          updateResults()
+        if (answer === 'resolved') {
+          conversation.finalStatus =
+            'Customer reports that the problem is no longer occurring'
 
-          container.innerHTML = `
-            <div class="notice">
-              <strong>Glad things appear to be working.</strong>
-              <p>
-                Keep your notes in case the issue returns.
-                These checks do not confirm what originally caused the problem.
-              </p>
-              <p>
-                If the problem returns, contact your website developer
-                rather than repeatedly changing live website settings.
-              </p>
-            </div>
-          `
+          showDeveloperHandoff(
+            'Your website appears to be working again',
+            'You reported that the problem is no longer occurring. Your findings have been saved in Issue History. If it returns, share the summary with your developer.'
+          )
           return
         }
 
-        if (status === 'some') {
+        if (answer === 'some') {
+          conversation.finalStatus =
+            'Some improvement, but the customer still has concerns'
+
           showDeveloperHandoff(
             'Some concerns still need attention',
             'Even if something has improved, the remaining concerns deserve a closer look. Share your findings with a developer so they can investigate safely.'
           )
           return
         }
+
+        conversation.finalStatus =
+          'Customer still needs help after completing initial checks'
 
         showDeveloperHandoff(
           'A website professional is the next step',
@@ -832,36 +1113,69 @@ function showSelfHelp(conversation, container) {
     }
 
     const check = checks[index]
+    const isPhoneComparison = check.topic === 'Compare another phone'
+    const isPrivateWindow = check.topic === 'Check a private browser window'
+    const isRefresh = check.topic === 'Refresh the affected page'
+
+    const choices = isPhoneComparison
+      ? [
+          ['both', 'The layout looks wrong on both phones'],
+          ['one', 'The layout only looks wrong on my phone'],
+          ['skip', "I don't have another phone to check"],
+          ['help', "I'd rather get professional help"]
+        ]
+      : isPrivateWindow
+        ? [
+            ['still', 'The layout still looks wrong in the private window'],
+            ['normal', 'The layout looks normal in the private window'],
+            ['skip', "I haven't checked"],
+            ['help', "I'd rather get professional help"]
+          ]
+        : isRefresh
+          ? [
+              ['fixed', 'Refreshing fixed the problem'],
+              ['still', 'The problem is still there'],
+              ['skip', "I haven't tried refreshing"],
+              ['help', "I'd rather get professional help"]
+            ]
+          : [
+              ['yes', 'Yes, I completed this check'],
+              ['no', 'Not yet'],
+              ['help', "I'd rather get professional help"]
+            ]
 
     container.innerHTML = `
       <div class="notice">
         <strong>Step ${index + 1} of ${checks.length}: ${escapeHTML(check.topic)}</strong>
         <p>${escapeHTML(check.instructions)}</p>
-        <p><strong>Were you able to complete this check?</strong></p>
+        <p><strong>${isPhoneComparison || isPrivateWindow || isRefresh
+          ? 'What did you find?'
+          : 'Were you able to complete this check?'}</strong></p>
       </div>
 
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;">
-        <button type="button" class="secondary-button" data-check="yes">
-          Yes
-        </button>
-
-        <button type="button" class="secondary-button" data-check="no">
-          Not yet
-        </button>
-
-        <button type="button" class="secondary-button" data-check="help">
-          I'd rather get help
-        </button>
+      <div style="display:grid;gap:10px;margin:12px 0;">
+        ${choices.map(([value, label]) => `
+          <button
+            type="button"
+            class="secondary-button"
+            data-check="${escapeHTML(value)}"
+            style="text-align:left;"
+          >
+            ${escapeHTML(label)}
+          </button>
+        `).join('')}
       </div>
     `
 
     container.querySelectorAll('[data-check]').forEach(button => {
       button.addEventListener('click', () => {
         const answer = button.dataset.check
+        const choice = choices.find(item => item[0] === answer)
 
         results.push({
           topic: check.topic,
-          answer
+          answer,
+          finding: choice ? choice[1] : ''
         })
 
         updateResults()
@@ -880,12 +1194,32 @@ function showSelfHelp(conversation, container) {
         if (index < checks.length) {
           const feedback = document.createElement('p')
 
-          feedback.textContent =
-            answer === 'yes'
-              ? check.success
-              : 'That check has been marked as not completed.'
+          if (isPhoneComparison) {
+            feedback.textContent =
+              answer === 'both'
+                ? 'The issue appears on more than one phone. Next, we will check whether the browser makes a difference.'
+                : answer === 'one'
+                  ? 'The issue may be specific to one phone or browser. Let us compare a private window next.'
+                  : answer === 'skip'
+                    ? 'No problem. We can continue without another phone.'
+                    : ''
+          } else if (isPrivateWindow) {
+            feedback.textContent =
+              answer === 'still'
+                ? 'The layout also looks wrong in a private window. Next, we will check whether refreshing changes it.'
+                : answer === 'normal'
+                  ? 'The layout looks normal in a private window. Browser-specific stored information may be involved, but the cause is not confirmed.'
+                  : 'We can continue without checking a private window.'
+          } else {
+            feedback.textContent =
+              answer === 'yes'
+                ? check.success
+                : 'We can continue without completing that check.'
+          }
 
-          container.prepend(feedback)
+          if (feedback.textContent) {
+            container.prepend(feedback)
+          }
         }
       })
     })
@@ -1174,7 +1508,239 @@ function showHistory() {
     block: 'start'
   })
 }
+/*
+ * SiteSidekick Legal & Privacy information.
+ * Prototype disclosures — review before public launch.
+ */
+function showLegal(section = '') {
+  setView('legal')
 
+  legalPanel.innerHTML = `
+    <p class="eyebrow">INFORMATION & TRANSPARENCY</p>
+    <h1 id="ssk-legal-title">Legal &amp; Privacy</h1>
+
+    <p>
+      SiteSidekick is an independently developed website troubleshooting
+      assistant created by TB Designs. It provides guided troubleshooting,
+      optional AI assistance, and developer handoff reports.
+    </p>
+
+    <p>
+      <strong>Prototype notice:</strong>
+      SiteSidekick is currently a demonstration application.
+      The following information describes its intended operation and
+      limitations. These disclosures must be reviewed against the
+      deployed application's actual behavior before public launch.
+    </p>
+
+    <nav class="ssk-legal-toc" aria-label="Legal page sections">
+      <a href="#ssk-privacy">Privacy Policy</a>
+      <a href="#ssk-terms">Terms of Use</a>
+      <a href="#ssk-ai-disclosure">AI Disclosure</a>
+      <a href="#ssk-disclaimer">Troubleshooting Disclaimer</a>
+      <a href="#ssk-cookies">Cookies &amp; Analytics</a>
+      <a href="#ssk-meta-legal">Meta AI Legal Documents</a>
+    </nav>
+
+    <section id="ssk-privacy" class="ssk-policy-section">
+      <h2>Privacy Policy</h2>
+      <p><strong>Last updated:</strong> October 31, 2026</p>
+
+      <h3>Information you provide</h3>
+      <p>
+        SiteSidekick processes website issue descriptions, answers to
+        troubleshooting questions, recorded checks, and other information
+        you voluntarily enter.
+      </p>
+
+      <h3>Saved troubleshooting history</h3>
+      <p>
+        The current prototype uses browser local storage to save
+        troubleshooting sessions. Information stored in your browser
+        may remain available until it is deleted or the browser's
+        stored data is cleared.
+      </p>
+
+      <h3>AI processing</h3>
+      <p>
+        When optional AI assistance is requested, troubleshooting
+        information is transmitted to SiteSidekick's backend and
+        submitted to Meta's Model API for processing.
+        Do not enter passwords, API keys, payment information,
+        or sensitive personal information.
+      </p>
+
+      <h3>Data retention and third parties</h3>
+      <p>
+        The prototype's browser history and backend AI requests have
+        different data-handling processes. Third-party processing,
+        hosting logs, and retention practices require additional
+        verification before a public release.
+      </p>
+
+      <h3>Privacy questions</h3>
+      <p>
+        Contact TB Designs using the support contact provided
+        within SiteSidekick.
+      </p>
+    </section>
+
+    <section id="ssk-terms" class="ssk-policy-section">
+      <h2>Terms of Use</h2>
+      <p><strong>Last updated:</strong> October 31, 2026</p>
+      <p>
+        SiteSidekick is provided as a demonstration of website
+        troubleshooting assistance. Its guidance is informational
+        and should not be treated as a guarantee that any website
+        issue will be diagnosed or resolved.
+      </p>
+      <p>
+        Users are responsible for reviewing suggestions before taking
+        action. Do not use SiteSidekick to access systems without
+        authorization, expose confidential information, or perform
+        unlawful activities.
+      </p>
+      <p>
+        Features, availability, and functionality may change during
+        development. The prototype does not represent an active
+        paid subscription agreement.
+      </p>
+    </section>
+
+    <section id="ssk-ai-disclosure" class="ssk-policy-section">
+      <h2>AI Disclosure</h2>
+      <p>
+        SiteSidekick offers optional AI-generated troubleshooting
+        assistance powered by Meta Muse Wonder through Meta's Model API.
+      </p>
+      <p>
+        When you request AI assistance, your issue description,
+        troubleshooting answers, and relevant findings may be
+        transmitted for AI processing.
+      </p>
+      <p>
+        AI responses can contain mistakes, omissions, or incorrect
+        assumptions. SiteSidekick does not independently inspect
+        your website or verify every recommendation.
+      </p>
+      <p>
+        Avoid submitting confidential information. Review all
+        recommendations and consult a qualified professional
+        when necessary.
+      </p>
+    </section>
+
+    <section id="ssk-disclaimer" class="ssk-policy-section">
+      <h2>Website Troubleshooting Disclaimer</h2>
+      <p>
+        SiteSidekick provides general educational and troubleshooting
+        information. It does not guarantee website availability,
+        security, accessibility, performance, or successful repairs.
+      </p>
+      <p>
+        Possible causes are not confirmed diagnoses. Changes involving
+        hosting, payments, security, databases, backups, or production
+        systems should be evaluated by an appropriate professional.
+      </p>
+      <p>
+        SiteSidekick does not automatically make changes to your website
+        through its guided troubleshooting feature.
+      </p>
+    </section>
+
+    <section id="ssk-cookies" class="ssk-policy-section">
+      <h2>Cookies &amp; Analytics</h2>
+      <p>
+        The current prototype uses browser storage to maintain saved
+        troubleshooting sessions. Browser local storage is different
+        from an HTTP cookie.
+      </p>
+      <p>
+        Google Analytics has not yet been added as part of the
+        development steps in this project. If analytics or other
+        tracking technologies are introduced, this section must be
+        updated to accurately disclose their operation and any
+        applicable consent choices.
+      </p>
+      <p>
+        Hosting providers and other infrastructure may have separate
+        logging or storage practices that must be verified before
+        public launch.
+      </p>
+    </section>
+
+    <section id="ssk-meta-legal" class="ssk-policy-section">
+      <h2>Meta AI Legal Documents</h2>
+      <p>
+        SiteSidekick uses Meta AI technology but is independently
+        developed by TB Designs. It is not affiliated with or
+        endorsed by Meta.
+      </p>
+      <p>
+        The following links lead to official Meta documentation.
+        Meta controls and may update these documents.
+      </p>
+
+      <ul>
+        <li>
+          <a href="https://dev.meta.ai/legal"
+             target="_blank" rel="noopener noreferrer">
+            Meta AI Developer Legal Center ↗
+          </a>
+        </li>
+        <li>
+          <a href="https://dev.meta.ai/legal/terms-of-service"
+             target="_blank" rel="noopener noreferrer">
+            Meta Model API Terms of Service ↗
+          </a>
+        </li>
+        <li>
+          <a href="https://dev.meta.ai/legal/acceptable-use-policy"
+             target="_blank" rel="noopener noreferrer">
+            Meta Acceptable Use Policy ↗
+          </a>
+        </li>
+        <li>
+          <a href="https://dev.meta.ai/legal/geographic-use-policy"
+             target="_blank" rel="noopener noreferrer">
+            Meta Geographic Use Policy ↗
+          </a>
+        </li>
+      </ul>
+
+      <p>
+        These third-party documents supplement, but do not replace,
+        SiteSidekick's own privacy disclosures and terms.
+      </p>
+    </section>
+  `
+
+  if (section) {
+    const target = document.getElementById(section)
+
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      })
+      return
+    }
+  }
+
+  legalPanel.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
+  })
+}
+/*
+ * Saved session display.
+ * Updated to show the customer's recorded findings.
+ */
+
+/*
+ * Saved session display.
+ * Shows the customer's recorded findings and updated recommendation.
+ */
 function showSavedSession(session) {
   setView('overview')
   resultPanel.hidden = false
@@ -1182,9 +1748,20 @@ function showSavedSession(session) {
   const transcript = session.transcript || []
   const checks = session.checkResults || []
 
+  const updatedOutcome = conversationOutcome({
+    description: session.description || '',
+    type: session.type === 'conversation'
+      ? getConversationType(session.description || '')
+      : session.type || 'general',
+    answers: [],
+    transcript,
+    checkResults: checks,
+    finalStatus: session.finalStatus || ''
+  })
+
   resultPanel.innerHTML = `
     <p class="eyebrow">SAVED CONVERSATION</p>
-    <h2>${escapeHTML(session.outcome?.title || 'Website troubleshooting')}</h2>
+    <h2>${escapeHTML(updatedOutcome.title || 'Website troubleshooting')}</h2>
     <p>Saved ${escapeHTML(formatDate(session.createdAt))}</p>
 
     <blockquote>${escapeHTML(session.description)}</blockquote>
@@ -1202,9 +1779,12 @@ function showSavedSession(session) {
         <div class="notice">
           <strong>${escapeHTML(check.topic)}</strong>
           <p>${escapeHTML(
-            check.answer === 'yes' ? 'Completed' :
-            check.answer === 'no' ? 'Not completed' :
-            'Requested professional help'
+            check.finding || (
+              check.answer === 'yes' ? 'Completed' :
+              check.answer === 'no' ? 'Not completed' :
+              check.answer === 'skip' ? 'Not checked' :
+              'Requested professional help'
+            )
           )}</p>
         </div>
       `).join('')}
@@ -1219,22 +1799,27 @@ function showSavedSession(session) {
 
     <div class="notice">
       <strong>Next steps</strong>
-      <p>${escapeHTML(session.outcome?.message || '')}</p>
+      <p>${escapeHTML(updatedOutcome.message || '')}</p>
     </div>
 
     <label for="saved-summary">Developer summary</label>
-    <textarea id="saved-summary" rows="10">${escapeHTML(session.detail || '')}</textarea>
+    <textarea id="saved-summary" rows="16">${escapeHTML(conversationSummary({
+  description: session.description || '',
+  transcript: session.transcript || [],
+  checkResults: session.checkResults || [],
+  finalStatus: session.finalStatus || ''
+}))}</textarea>
 
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin:14px 0;">
-      <button class="secondary-button" id="saved-copy">
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin:14px 0;">
+      <button type="button" class="secondary-button" id="saved-copy">
         Share With My Developer
       </button>
 
-      <button class="secondary-button" id="back-to-history">
+      <button type="button" class="secondary-button" id="back-to-history">
         Back to issue history
       </button>
 
-      <button class="secondary-button" id="new-session">
+      <button type="button" class="secondary-button" id="new-session">
         Start another issue
       </button>
     </div>
@@ -1254,11 +1839,26 @@ function showSavedSession(session) {
     resetSession
   )
 
+ 
+
+  const savedConversationForAI = {
+    description: session.description || '',
+    type: getConversationType(session.description || ''),
+    answers: [],
+    transcript: session.transcript || [],
+    checkResults: session.checkResults || [],
+    finalStatus: session.finalStatus || ''
+  }
+
+  checkSiteSidekickAI(savedConversationForAI)
+
+
   resultPanel.scrollIntoView({
     behavior: 'smooth',
     block: 'start'
   })
 }
+
 
 /* Start a new troubleshooting session */
 
@@ -1297,6 +1897,17 @@ document.querySelector('#start-button').addEventListener('click', () => {
   beginTroubleshooting(issueInput.value)
 })
 
+const businessGuideButton = document.querySelector('#ssk-business-guide-button')
+const businessGuide = document.querySelector('#ssk-business-guide')
+
+businessGuideButton.addEventListener('click', () => {
+  const isOpening = businessGuide.hidden
+
+  businessGuide.hidden = !isOpening
+  businessGuideButton.setAttribute('aria-expanded', String(isOpening))
+})
+
+
 document.querySelector('#new-issue').addEventListener('click', resetSession)
 
 document.querySelectorAll('.suggestion[data-issue]').forEach(button => {
@@ -1309,6 +1920,24 @@ document.querySelectorAll('.suggestion[data-issue]').forEach(button => {
 historyLink.addEventListener('click', event => {
   event.preventDefault()
   showHistory()
+})
+// Open the Legal & Privacy page
+legalLink.addEventListener('click', event => {
+  event.preventDefault()
+  window.location.hash = 'legal'
+  showLegal()
+})
+// Open the correct policy when a footer legal link is clicked
+document.querySelectorAll('.ssk-footer-legal a[href^="#ssk-"]').forEach(link => {
+  link.addEventListener('click', event => {
+    event.preventDefault()
+
+    const sectionId = link.getAttribute('href').substring(1)
+
+    showLegal(sectionId)
+
+    window.history.replaceState(null, '', '#' + sectionId)
+  })
 })
 
 overviewLink.addEventListener('click', event => {
@@ -1330,7 +1959,8 @@ document.querySelector('#home-link').addEventListener('click', event => {
 let siteSidekickAIAvailable = false
 let siteSidekickAIRequestPending = false
 
-async function checkSiteSidekickAI() {
+
+async function checkSiteSidekickAI(conversation = null) {
   try {
     const response = await fetch('/api/health')
 
@@ -1347,64 +1977,182 @@ async function checkSiteSidekickAI() {
     siteSidekickAIAvailable = false
   }
 
-  if (activeConversation && !resultPanel.hidden) {
-    showSiteSidekickAI(activeConversation)
+  const currentConversation = conversation || activeConversation
+
+  if (currentConversation && !resultPanel.hidden) {
+    showSiteSidekickAI(currentConversation)
   }
 }
+
+
 
 function showSiteSidekickAI(conversation) {
   const existingPanel = resultPanel.querySelector('#ai-companion')
 
   if (existingPanel) existingPanel.remove()
 
-  if (
-    !siteSidekickAIAvailable ||
-    isHighRisk(conversation) ||
-    wantsProfessionalHelp(conversation)
-  ) {
-    return
-  }
+  const aiUnavailable = !siteSidekickAIAvailable
+  const aiRestricted =
+    isHighRisk(conversation) || wantsProfessionalHelp(conversation)
 
   const panel = document.createElement('div')
   panel.id = 'ai-companion'
-  panel.className = 'notice'
+  panel.className = 'notice ssk-ai-panel'
 
   panel.innerHTML = `
-    <strong>Optional AI guidance</strong>
+    <div class="ssk-ai-heading">
+      <div>
+        <span class="ssk-ai-eyebrow">ADDITIONAL SUPPORT</span>
+        <h3>Optional AI Guidance</h3>
+        <p class="ssk-ai-intro">
+          Get an additional explanation of your website issue,
+          possible causes, and practical next steps.
+        </p>
+      </div>
+      <span class="ssk-ai-provider">Powered by Meta AI</span>
+    </div>
 
-    <p>
-      Ask SiteSidekick AI for additional guidance about
-      your website issue. This uses a Meta API request.
-    </p>
+    <div class="ssk-ai-info">
+      <p>
+        SiteSidekick uses Meta Muse Wonder to provide optional
+        AI-generated troubleshooting guidance. When you request
+        assistance, your website issue description, troubleshooting
+        answers, and relevant findings will be sent to Meta
+        for processing.
+      </p>
+
+      <p>
+        AI-generated recommendations may be inaccurate and are not
+        confirmed technical diagnoses. Do not share passwords,
+        API keys, payment information, or other sensitive
+        personal information.
+      </p>
+    </div>
+
+    <div class="ssk-ai-consent-section">
+      <label class="ssk-ai-consent-label">
+        <input
+          type="checkbox"
+          id="ssk-ai-consent"
+        >
+        <span>
+          I understand that my troubleshooting information will
+          be submitted to Meta AI for processing, and I agree
+          to proceed.
+        </span>
+      </label>
+
+      <p class="ssk-ai-consent-links">
+        Review our
+        <a href="#ssk-privacy">Privacy Policy</a>
+        and
+        <a href="#ssk-ai-disclosure">AI Disclosure</a>.
+      </p>
+    </div>
+
+    <p
+      id="ssk-ai-status"
+      class="ssk-ai-status"
+      role="status"
+      aria-live="polite"
+    ></p>
 
     <button
       type="button"
-      class="secondary-button"
+      class="secondary-button ssk-ai-button"
       id="ask-sitesidekick-ai"
     >
       Ask SiteSidekick AI
     </button>
 
-    <div id="sitesidekick-ai-response" aria-live="polite"></div>
+    <div
+      id="sitesidekick-ai-response"
+      class="ssk-ai-response"
+      aria-live="polite"
+    ></div>
   `
 
-  resultPanel.appendChild(panel)
+  // Keep AI guidance directly below the troubleshooting actions.
+  const actionButtons = resultPanel.querySelector('#copy-summary')
+
+  if (actionButtons) {
+    const actionsContainer = actionButtons.parentElement
+    actionsContainer.insertAdjacentElement('afterend', panel)
+  } else {
+    resultPanel.appendChild(panel)
+  }
 
   const button = panel.querySelector('#ask-sitesidekick-ai')
   const output = panel.querySelector('#sitesidekick-ai-response')
+  const consentCheckbox = panel.querySelector('#ssk-ai-consent')
+  const status = panel.querySelector('#ssk-ai-status')
+
+  function updateAIButton() {
+    button.disabled =
+      aiUnavailable ||
+      aiRestricted ||
+      !consentCheckbox.checked ||
+      siteSidekickAIRequestPending
+
+    if (siteSidekickAIRequestPending) {
+      status.textContent = 'SiteSidekick AI is preparing your guidance.'
+    } else if (aiRestricted) {
+      status.textContent =
+        'AI guidance is unavailable for this issue. Please use the professional support options provided above.'
+    } else if (aiUnavailable) {
+      status.textContent =
+        'AI guidance is temporarily unavailable. Guided troubleshooting is still available.'
+    } else if (!consentCheckbox.checked) {
+      status.textContent =
+        'Check the consent box above to enable AI guidance.'
+    } else {
+      status.textContent =
+        'AI guidance is ready. Select the button below when you want to continue.'
+    }
+  }
+
+  updateAIButton()
+
+  consentCheckbox.addEventListener('change', updateAIButton)
 
   button.addEventListener('click', async () => {
-    if (siteSidekickAIRequestPending) return
+    if (
+      siteSidekickAIRequestPending ||
+      aiUnavailable ||
+      aiRestricted ||
+      !consentCheckbox.checked
+    ) return
 
     siteSidekickAIRequestPending = true
     button.disabled = true
     button.textContent = 'Waiting for AI...'
     output.textContent = ''
+    updateAIButton()
 
     const messages = [
       {
         role: 'user',
-        content: conversationSummary(conversation).slice(0, 4000)
+        content: `
+Analyze this website troubleshooting case for a small-business owner.
+
+CUSTOMER INFORMATION:
+${conversationSummary(conversation)}
+
+YOUR TASK:
+1. Summarize what the customer is experiencing.
+2. Explain what the completed troubleshooting checks tell us.
+3. Identify up to three plausible causes, clearly labeling them as possibilities rather than confirmed diagnoses.
+4. Recommend safe, practical next steps the customer can take.
+5. Explain what information a website developer would need to investigate further.
+
+IMPORTANT RULES:
+- Do not claim to have inspected or accessed the website.
+- Do not invent test results.
+- Do not claim the root cause is confirmed.
+- Do not recommend editing live code, disabling security, or making risky changes.
+- Use clear language suitable for someone without technical experience.
+- Keep the response concise and actionable.
+`.trim().slice(0, 4000)
       }
     ]
 
@@ -1427,22 +2175,25 @@ function showSiteSidekickAI(conversation) {
         throw new Error('Unexpected AI response.')
       }
 
-      const paragraph = document.createElement('p')
-      paragraph.style.whiteSpace = 'pre-wrap'
-      paragraph.textContent = data.reply
+      // Format and sanitize the Meta AI response.
+      const formattedReply = marked.parse(data.reply, {
+        gfm: true,
+        breaks: true
+      })
 
-      output.replaceChildren(paragraph)
+      output.innerHTML = DOMPurify.sanitize(formattedReply)
     } catch (error) {
       output.textContent =
         error.message ||
         'AI is unavailable. Guided troubleshooting still works.'
     } finally {
       siteSidekickAIRequestPending = false
-      button.disabled = false
+      updateAIButton()
       button.textContent = 'Ask SiteSidekick AI'
     }
   })
 }
+
 
 // Extend the existing conversation display without replacing it.
 const originalSiteSidekickRenderConversation = renderConversation
@@ -1454,4 +2205,7 @@ renderConversation = function (conversation) {
 
 // Check the local backend without contacting Meta.
 checkSiteSidekickAI()
+
+
+
 

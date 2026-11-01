@@ -298,3 +298,358 @@ textarea::placeholder { color: #a0a0a2; }
   .suggestion { padding: 13px; }
   .page-footer { margin-top: 35px; }
 }
+/* ==========================================
+   SITESIDEKICK — LEGAL FOOTER
+   ========================================== */
+
+.page-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 28px 48px;
+  align-items: start;
+  margin-top: 48px;
+  padding: 36px 28px 24px;
+  border-top: 1px solid #dfe5eb;
+  background: #f7f9fc;
+  color: #334155;
+  text-align: left;
+}
+
+.ssk-footer-brand strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #142c46;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.ssk-footer-brand p {
+  margin: 0 0 10px;
+  line-height: 1.6;
+}
+
+.ssk-footer-credit {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.ssk-footer-legal h2 {
+  margin: 0 0 14px;
+  color: #142c46;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.ssk-footer-legal nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 18px;
+}
+
+.ssk-footer-legal a {
+  color: #245b89;
+  font-size: 13px;
+  line-height: 1.5;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.ssk-footer-legal a:hover {
+  text-decoration: underline;
+}
+
+.ssk-footer-legal a:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+.ssk-footer-notice {
+  grid-column: 1 / -1;
+  padding: 18px 20px;
+  border: 1px solid #e0e7ef;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.ssk-footer-notice p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.ssk-footer-notice p + p {
+  margin-top: 8px;
+}
+
+.ssk-footer-copyright {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding-top: 16px;
+  border-top: 1px solid #e0e7ef;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+@media (max-width: 700px) {
+  .page-footer {
+    grid-template-columns: 1fr;
+    gap: 26px;
+    padding: 28px 18px 22px;
+  }
+
+  .ssk-footer-legal nav {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ssk-footer-notice,
+  .ssk-footer-copyright {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 380px) {
+  .ssk-footer-legal nav {
+    grid-template-columns: 1fr;
+  }
+}
+/* =========================================
+   SiteSidekick AI Consent & Button States
+   ========================================= */
+
+#ai-companion #ask-sitesidekick-ai:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: grayscale(100%);
+}
+
+#ai-companion #ask-sitesidekick-ai:not(:disabled) {
+  opacity: 1;
+  cursor: pointer;
+  filter: none;
+}
+
+#ai-companion .ssk-ai-consent-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 18px 0 12px;
+  cursor: pointer;
+}
+
+#ai-companion .ssk-ai-consent-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  accent-color: #BD2F37;
+}
+
+#ai-companion .ssk-ai-consent-links {
+  font-size: 14px;
+  margin: 10px 0 18px;
+}
+
+/* SiteSidekick - Optional AI Guidance */
+
+.ssk-ai-panel {
+  margin-top: 24px;
+  padding: 26px;
+  border: 1px solid #dce4eb;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.ssk-ai-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.ssk-ai-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #52718a;
+}
+
+.ssk-ai-heading h3 {
+  margin: 0 0 8px;
+  font-size: 23px;
+  line-height: 1.3;
+  color: #18344c;
+}
+
+.ssk-ai-intro {
+  margin: 0;
+  color: #526575;
+  line-height: 1.6;
+}
+
+.ssk-ai-provider {
+  display: inline-block;
+  padding: 7px 12px;
+  border-radius: 20px;
+  background: #edf3f7;
+  color: #35556c;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ssk-ai-info {
+  margin-bottom: 20px;
+  padding: 16px 18px;
+  border-radius: 10px;
+  background: #f5f8fa;
+  color: #425666;
+  line-height: 1.65;
+}
+
+.ssk-ai-info p {
+  margin: 0 0 12px;
+}
+
+.ssk-ai-info p:last-child {
+  margin-bottom: 0;
+}
+
+.ssk-ai-consent-section {
+  margin-bottom: 14px;
+}
+
+.ssk-ai-consent-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  line-height: 1.55;
+  cursor: pointer;
+}
+
+.ssk-ai-consent-label input {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+  cursor: pointer;
+}
+
+.ssk-ai-consent-links {
+  margin: 10px 0 0 30px;
+  font-size: 13px;
+  color: #5c6d7b;
+}
+
+.ssk-ai-consent-links a {
+  text-decoration: underline;
+}
+
+.ssk-ai-status {
+  margin: 12px 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #526575;
+}
+
+.ssk-ai-button {
+  margin-top: 4px;
+}
+
+.ssk-ai-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ssk-ai-response:not(:empty) {
+  margin-top: 22px;
+  padding: 20px;
+  border: 1px solid #dce4eb;
+  border-radius: 10px;
+  background: #f8fafc;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .ssk-ai-panel {
+    padding: 18px;
+  }
+
+  .ssk-ai-heading h3 {
+    font-size: 20px;
+  }
+
+  .ssk-ai-provider {
+    font-size: 11px;
+  }
+}
+
+/* SiteSidekick - Business Starting Guide */
+
+.ssk-business-option {
+  margin: 18px 0 22px;
+}
+
+#ssk-business-guide-button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  padding: 18px 20px;
+  border: 1px solid #dce4eb;
+  border-radius: 12px;
+  background: #f5f8fa;
+  color: #18344c;
+  text-align: left;
+  cursor: pointer;
+}
+
+#ssk-business-guide-button strong {
+  font-size: 17px;
+}
+
+#ssk-business-guide-button span {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+#ssk-business-guide-button:hover {
+  border-color: #52718a;
+}
+
+#ssk-business-guide-button:focus-visible {
+  outline: 3px solid #52718a;
+  outline-offset: 3px;
+}
+
+#ssk-business-guide {
+  margin-top: 12px;
+  padding: 22px;
+  border: 1px solid #dce4eb;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+#ssk-business-guide[hidden] {
+  display: none !important;
+}
+
+#ssk-business-guide h3 {
+  margin-top: 0;
+}
+
+.ssk-business-guide-content h4 {
+  margin: 20px 0 6px;
+  color: #18344c;
+}
+
+.ssk-business-guide-content p {
+  margin: 0;
+  line-height: 1.65;
+}
