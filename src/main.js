@@ -7,10 +7,39 @@ import DOMPurify from 'dompurify'
 document.querySelector('#app').innerHTML = `
   <div class="app-shell">
     <aside class="sidebar">
-      <a class="brand" href="#" id="home-link">
-        <span class="brand-mark">S</span>
-        <span>SiteSidekick</span>
-      </a>
+     
+
+<a class="brand" href="#" id="home-link" aria-label="SiteSidekick home">
+  <span class="ssk-logo" aria-hidden="true">
+    <svg viewBox="0 0 130 100" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15 62 C-3 91 79 98 114 57"
+            fill="none" stroke="#BD2F37"
+            stroke-width="9" stroke-linecap="round"/>
+      <rect x="17" y="12" width="97" height="72" rx="12"
+            fill="#182438" stroke="#FFFFFF" stroke-width="5"/>
+      <path d="M18 33 H113" stroke="#FFFFFF" stroke-width="3"/>
+      <circle cx="30" cy="23" r="3.5" fill="#FFFFFF"/>
+      <circle cx="42" cy="23" r="3.5" fill="#FFFFFF"/>
+      <circle cx="54" cy="23" r="3.5" fill="#FFFFFF"/>
+      <text x="65" y="67" text-anchor="middle"
+            fill="#FFFFFF" font-size="35"
+            font-weight="900"
+            font-family="Arial, sans-serif"
+            letter-spacing="-3">SSK</text>
+      <circle cx="108" cy="16" r="16" fill="#BD2F37"/>
+      <text x="108" y="24" text-anchor="middle"
+            fill="#FFFFFF" font-size="25"
+            font-weight="800"
+            font-family="Arial, sans-serif">$</text>
+    </svg>
+  </span>
+  <span class="ssk-brand-text">
+    <strong>SiteSidekick</strong>
+    <small>A product of TB Designs</small>
+  </span>
+</a>
+
+
 
       <button class="new-issue" id="new-issue">+ New troubleshooting session</button>
      <p class="nav-label">WORKSPACE</p>
@@ -25,21 +54,30 @@ document.querySelector('#app').innerHTML = `
           <strong>Website help, without the guesswork.</strong>
           <p>Understand the issue, explore likely causes, and know what to do next.</p>
         </div>
-        <div class="profile">
-          <div class="avatar">TB</div>
-          <div>
-            <strong>Your workspace</strong>
-            <small>Starter preview</small>
-          </div>
-        </div>
+        
+<div class="profile">
+  <div class="avatar">TB</div>
+  <div>
+    <strong>Your workspace</strong>
+    <small>A product of TB Designs</small>
+  </div>
+</div>
+
       </div>
     </aside>
 
     <main class="main-content">
-      <header class="topbar">
-        <span class="breadcrumb">Workspace / <strong id="breadcrumb-page">Overview</strong></span>
-        <span class="status"><span></span> Preview mode</span>
-      </header>
+      
+
+
+<header class="topbar" hidden>
+  <span class="breadcrumb">
+    Workspace / <strong id="breadcrumb-page">Overview</strong>
+  </span>
+</header>
+
+
+
 
       <section class="welcome" id="welcome-section">
         <p class="eyebrow">YOUR WEBSITE SUPPORT COMPANION</p>
@@ -323,6 +361,26 @@ function findKnowledgeRecord(description) {
   return matches.length ? matches[0].record : null
 }
 
+const browserQuestions = [
+  {
+    prompt: 'What happens when you try to use your web browser?',
+    choices: [
+      ['wontopen', 'The browser will not open at all'],
+      ['websites', 'The browser opens, but websites will not load'],
+      ['onewebsite', 'Only one website has a problem'],
+      ['unsure', 'I am not sure what is happening']
+    ]
+  },
+  {
+    prompt: 'Does the same problem happen in another browser?',
+    choices: [
+      ['yes', 'Yes, the problem happens in another browser'],
+      ['no', 'No, another browser works normally'],
+      ['unchecked', 'I have not tried another browser']
+    ]
+  }
+]
+
 /* Guided questions */
 
 const questionSets = {
@@ -499,8 +557,16 @@ const questionSets = {
   ]
 }
 
+questionSets.browser = browserQuestions
+
 function getConversationType(description) {
   const text = description.toLowerCase()
+
+  if (
+    /\b(browser|chrome|firefox|safari|edge|incognito)\b/.test(text)
+  ) {
+    return 'browser'
+  }
 
   if (/404|not found|crash|broken|error|can't log|cannot log/.test(text)) {
     return 'error'
@@ -667,14 +733,145 @@ function conversationSummary(conversation) {
     lines.push('No initial checks recorded.')
   }
 
+  // Check for conflicting customer answers.
+  // Do not change the customer's original responses.
+  const clarificationNotes = []
+
+  const initialAnswers = conversation.answers || []
+  const findings = conversation.checkResults || []
+
+  const getFinding = topic =>
+    findings.find(item => item.topic === topic)?.answer
+
+  const privateFinding =
+    getFinding('Compare a private browser window') ||
+    getFinding('Check a private browser window')
+
+  // General questionnaire: question 3 asks whether
+  // the problem also happens in a private window.
+  if (conversation.type === 'general') {
+    const initialPrivateAnswer = initialAnswers[2]
+
+    if (
+      (initialPrivateAnswer === 'yes' && privateFinding === 'normal') ||
+      (initialPrivateAnswer === 'no' && privateFinding === 'still')
+    ) {
+      clarificationNotes.push(
+        'Private browser results differ between the initial questionnaire and the guided checks. Please confirm which result is accurate.'
+      )
+    }
+
+    const initialTiming = initialAnswers[1]
+    const checkedTiming = getFinding('Review when the problem started')
+
+    if (
+      (initialTiming === 'sudden' && checkedTiming === 'ongoing') ||
+      (initialTiming === 'ongoing' && checkedTiming === 'sudden') ||
+      (initialTiming === 'recent' &&
+        ['sudden', 'ongoing'].includes(checkedTiming))
+    ) {
+      clarificationNotes.push(
+        'The reported start time differs between the questionnaire and the guided checks. Please clarify when the problem began.'
+      )
+    }
+  }
+
+  if (clarificationNotes.length) {
+    lines.push(
+      '',
+      'FINDINGS THAT NEED CLARIFICATION',
+      ...clarificationNotes.map(note => `- ${note}`)
+    )
+  }
+
+  // Tailor recommendations to the customer's actual findings.
+  const getCheckAnswer = topic =>
+    (conversation.checkResults || []).find(item => item.topic === topic)?.answer
+
+  const recommendations = []
+
+  if (conversation.type === 'browser') {
+    const otherSites = getCheckAnswer('Compare another website')
+    const otherBrowser = getCheckAnswer('Compare another browser')
+    const browserAnswer = conversation.answers?.[1]
+   const browserConflict =
+  (browserAnswer === 'no' && otherBrowser === 'fails') ||
+  (browserAnswer === 'yes' && otherBrowser === 'works')
+
+const worksElsewhere =
+  otherBrowser === 'works' ||
+  (otherBrowser == null && browserAnswer === 'no')
+
+   if (browserConflict) {
+  recommendations.push(
+    'What we found: The initial questionnaire and guided checks gave different results when comparing another browser.',
+    'Possible explanation: The available answers do not establish whether the problem is specific to one browser.',
+    'Recommended next step: Confirm whether the affected websites work in another browser before making changes. Share the confirmed results with IT support or a website professional.'
+  )
+} else if (otherSites === 'fails' && worksElsewhere) {
+      recommendations.push(
+        'What we found: Multiple websites have problems in the original browser, but another browser works normally.',
+        'Possible explanation: The issue may be specific to the original browser, such as an extension, setting, or stored browsing data. This is not a confirmed diagnosis.',
+        'Recommended next step: Use the working browser temporarily. Ask an IT support person or website professional to review the original browser before changing website settings.'
+      )
+    } else if (otherSites === 'works') {
+      recommendations.push(
+        'What we found: Other websites work in the original browser, so the problem may be limited to a particular website.',
+        'Recommended next step: Record the affected website address and any error message, then share those details with the website owner or developer.'
+      )
+    } else if (otherSites === 'fails') {
+      recommendations.push(
+        'What we found: More than one website has problems in the original browser.',
+        'Recommended next step: Compare another browser or device if available, then share the results with IT support or a website professional.'
+      )
+    } else {
+      recommendations.push(
+        'Recommended next step: Identify whether the browser itself fails, multiple websites fail, or only one website is affected. Share the findings with IT support or a website professional.'
+      )
+    }
+  } else if (getCheckAnswer('Compare another phone') === 'both') {
+    recommendations.push(
+      'What we found: The reported mobile layout problem appears on more than one phone.',
+      'Recommended next step: Have the website developer review the affected page on mobile devices. Avoid making untested changes to the live site.'
+    )
+  } else if (getCheckAnswer('Compare another phone') === 'one') {
+    recommendations.push(
+      'What we found: The mobile layout problem was reported on only one phone.',
+      'Recommended next step: Record that phone and browser model and compare the affected page with another device before changing the website.'
+    )
+  } else if (getCheckAnswer('Compare a private browser window') === 'normal') {
+    recommendations.push(
+      'What we found: The problem disappears in a private browser window.',
+      'Possible explanation: Browser-specific stored information or extensions may be involved, but the cause is unverified.',
+      'Recommended next step: Share the browser details with a developer or IT support person before changing website settings.'
+    )
+  } else if (getCheckAnswer('Compare a private browser window') === 'still') {
+    recommendations.push(
+      'What we found: The problem also occurs in a private browser window.',
+      'Recommended next step: Record the affected page addresses and browser details for a website developer to investigate.'
+    )
+  }
+
+  if (clarificationNotes.length) {
+    recommendations.push(
+      'Please clarify the conflicting answers noted above before deciding on changes.'
+    )
+  }
+
+  if (!recommendations.length) {
+    recommendations.push(
+      'The underlying cause has not been confirmed.',
+      'Please review the reported issue and troubleshooting findings before recommending changes.'
+    )
+  }
+
   lines.push(
     '',
     '4. CURRENT STATUS',
     conversation.finalStatus || 'Not specified.',
     '',
     '5. RECOMMENDED NEXT STEPS',
-    'The underlying cause has not been confirmed.',
-    'Please review the reported issue and troubleshooting findings before recommending changes.',
+    ...recommendations,
     '',
     '6. ADDITIONAL INFORMATION',
     'Website URL: [To be provided]',
@@ -924,27 +1121,48 @@ function buildSelfHelpChecks(conversation) {
     )
   }
 
+
   if (checks.length === 0) {
-    const record = findKnowledgeRecord(conversation.description)
+    const browserIssue =
+      /\b(browser|chrome|firefox|safari|edge|incognito)\b/i.test(issue)
 
-    /*
-     * Use observation-only checks for general issues.
-     * Knowledge base instructions may involve changes,
-     * so do not automatically give those to beginners.
-     */
-    const steps = [
-      'Write down which page is affected, what you expected to happen, and what actually happened.',
-      'Open the same page in a private browser window. Note whether the problem still appears.',
-      'Write down when the problem started and whether anything changed around that time.'
-    ]
+    if (browserIssue) {
+      add(
+        'Identify what is not working',
+        'Check whether the browser opens normally and whether you can visit another familiar website. Do not change browser settings.',
+        'Record whether the browser itself or a particular website appears affected.'
+      )
 
-    if (record?.category) {
-      steps[0] = `For this ${record.category.toLowerCase()} concern, write down the affected page and exactly what happens. Do not change settings yet.`
+      add(
+        'Compare another website',
+        'Try visiting a different familiar website in the same browser. Does that website work normally?',
+        'Record whether the problem affects one website or multiple websites.'
+      )
+
+      add(
+        'Compare another browser',
+        'If another browser is available, open the affected website there. Do not install anything just for this check.',
+        'Record whether the same problem occurs in another browser.'
+      )
+    } else {
+      add(
+        'Identify the affected pages',
+        'Check whether the problem affects just one page or multiple pages. You do not need to make any changes.',
+        'Record which pages are affected.'
+      )
+
+      add(
+        'Compare a private browser window',
+        'Open the affected page in a private or incognito window. Check whether the same problem appears.',
+        'Record whether the problem also occurs in a private window.'
+      )
+
+      add(
+        'Review when the problem started',
+        'Think about when you first noticed the issue and whether anything changed around that time. Do not change any settings.',
+        'Record whether the issue followed a recent change.'
+      )
     }
-
-    steps.forEach((step, i) => {
-      add(`Check ${i + 1}`, step, 'That gives us more information about the issue.')
-    })
   }
 
   return checks.slice(0, 3)
@@ -1117,6 +1335,7 @@ function showSelfHelp(conversation, container) {
     const isPrivateWindow = check.topic === 'Check a private browser window'
     const isRefresh = check.topic === 'Refresh the affected page'
 
+
     const choices = isPhoneComparison
       ? [
           ['both', 'The layout looks wrong on both phones'],
@@ -1138,11 +1357,49 @@ function showSelfHelp(conversation, container) {
               ['skip', "I haven't tried refreshing"],
               ['help', "I'd rather get professional help"]
             ]
-          : [
+          : ({
+              'Identify what is not working': [
+                ['browser', 'The browser itself will not open or work'],
+                ['website', 'The browser works, but a website has problems'],
+                ['unsure', "I'm not sure"],
+                ['help', "I'd rather get professional help"]
+              ],
+              'Compare another website': [
+                ['works', 'Other websites work normally'],
+                ['fails', 'Other websites have problems too'],
+                ['skip', "I haven't checked"],
+                ['help', "I'd rather get professional help"]
+              ],
+              'Compare another browser': [
+                ['works', 'The website works in another browser'],
+                ['fails', 'The problem happens in another browser too'],
+                ['skip', "I don't have another browser to check"],
+                ['help', "I'd rather get professional help"]
+              ],
+              'Identify the affected pages': [
+                ['one', 'Only one page is affected'],
+                ['multiple', 'Multiple pages are affected'],
+                ['unsure', "I'm not sure"],
+                ['help', "I'd rather get professional help"]
+              ],
+              'Compare a private browser window': [
+                ['still', 'The problem also happens in a private window'],
+                ['normal', 'The problem disappears in a private window'],
+                ['skip', "I haven't checked"],
+                ['help', "I'd rather get professional help"]
+              ],
+              'Review when the problem started': [
+                ['recent', 'It started after a recent website change'],
+                ['sudden', 'It started suddenly without a known change'],
+                ['ongoing', 'It has been happening for a while'],
+                ['unsure', "I'm not sure"],
+                ['help', "I'd rather get professional help"]
+              ]
+            }[check.topic] || [
               ['yes', 'Yes, I completed this check'],
               ['no', 'Not yet'],
               ['help', "I'd rather get professional help"]
-            ]
+            ])
 
     container.innerHTML = `
       <div class="notice">
@@ -1150,7 +1407,7 @@ function showSelfHelp(conversation, container) {
         <p>${escapeHTML(check.instructions)}</p>
         <p><strong>${isPhoneComparison || isPrivateWindow || isRefresh
           ? 'What did you find?'
-          : 'Were you able to complete this check?'}</strong></p>
+          : ' What did you find?'}</strong></p>
       </div>
 
       <div style="display:grid;gap:10px;margin:12px 0;">
@@ -1167,62 +1424,118 @@ function showSelfHelp(conversation, container) {
       </div>
     `
 
+    
     container.querySelectorAll('[data-check]').forEach(button => {
       button.addEventListener('click', () => {
         const answer = button.dataset.check
         const choice = choices.find(item => item[0] === answer)
 
-        results.push({
-          topic: check.topic,
-          answer,
-          finding: choice ? choice[1] : ''
+        if (!choice) return
+
+        // Confirm the answer before saving or advancing.
+        const confirmation = document.createElement('div')
+        confirmation.className = 'ssk-answer-confirmation'
+        confirmation.innerHTML = `
+          <p class="ssk-confirm-label">YOUR SELECTED ANSWER</p>
+          <p class="ssk-confirm-answer">${escapeHTML(choice[1])}</p>
+          <p>Is this what you meant to select?</p>
+          <div class="ssk-confirm-actions">
+            <button type="button" class="secondary-button" data-change-answer>
+              Change Answer
+            </button>
+            <button type="button" class="secondary-button ssk-confirm-continue" data-confirm-answer>
+              Yes, Continue
+            </button>
+          </div>
+        `
+
+        // Hide the choices temporarily, without deleting them.
+        const choiceButtons = [
+          ...container.querySelectorAll('[data-check]')
+        ]
+
+        choiceButtons.forEach(item => {
+          item.disabled = true
         })
 
-        updateResults()
+        container.appendChild(confirmation)
 
-        if (answer === 'help') {
-          showDeveloperHandoff(
-            'A website professional can take it from here',
-            'You do not need to continue troubleshooting. Share what you have noticed with your developer so they can investigate safely.'
-          )
-          return
-        }
+        confirmation.querySelector('[data-change-answer]')
+          .addEventListener('click', () => {
+            confirmation.remove()
+            choiceButtons.forEach(item => {
+              item.disabled = false
+            })
+          })
 
-        index += 1
-        renderCheck()
+        confirmation.querySelector('[data-confirm-answer]')
+          .addEventListener('click', () => {
+            // Prevent duplicate submissions.
+            confirmation.querySelectorAll('button')
+              .forEach(item => {
+                item.disabled = true
+              })
 
-        if (index < checks.length) {
-          const feedback = document.createElement('p')
+            results.push({
+              topic: check.topic,
+              answer,
+              finding: choice[1]
+            })
 
-          if (isPhoneComparison) {
-            feedback.textContent =
-              answer === 'both'
-                ? 'The issue appears on more than one phone. Next, we will check whether the browser makes a difference.'
-                : answer === 'one'
-                  ? 'The issue may be specific to one phone or browser. Let us compare a private window next.'
-                  : answer === 'skip'
-                    ? 'No problem. We can continue without another phone.'
-                    : ''
-          } else if (isPrivateWindow) {
-            feedback.textContent =
-              answer === 'still'
-                ? 'The layout also looks wrong in a private window. Next, we will check whether refreshing changes it.'
-                : answer === 'normal'
-                  ? 'The layout looks normal in a private window. Browser-specific stored information may be involved, but the cause is not confirmed.'
-                  : 'We can continue without checking a private window.'
-          } else {
-            feedback.textContent =
-              answer === 'yes'
-                ? check.success
-                : 'We can continue without completing that check.'
-          }
+            updateResults()
 
-          if (feedback.textContent) {
-            container.prepend(feedback)
-          }
-        }
+            if (answer === 'help') {
+              showDeveloperHandoff(
+                'A website professional can take it from here',
+                'You do not need to continue troubleshooting. Share what you have noticed with your developer so they can investigate safely.'
+              )
+              return
+            }
+
+            index += 1
+            renderCheck()
+
+            if (index < checks.length) {
+              const feedback = document.createElement('p')
+              feedback.className = 'ssk-check-feedback'
+
+              if (isPhoneComparison) {
+                feedback.textContent =
+                  answer === 'both'
+                    ? 'The issue appears on more than one phone. Next, we will check whether the browser makes a difference.'
+                    : answer === 'one'
+                      ? 'The issue may be specific to one phone or browser. Let us compare a private window next.'
+                      : 'We can continue without another phone.'
+
+              } else if (isPrivateWindow) {
+                feedback.textContent =
+                  answer === 'still'
+                    ? 'The layout also looks wrong in a private window. Next, we will check whether refreshing changes it.'
+                    : answer === 'normal'
+                      ? 'The layout looks normal in a private window. Browser-specific stored information may be involved, but the cause is not confirmed.'
+                      : 'We can continue without checking a private window.'
+
+              } else if (isRefresh) {
+                feedback.textContent =
+                  answer === 'fixed'
+                    ? 'Refreshing appears to have fixed the problem.'
+                    : answer === 'still'
+                      ? 'Refreshing did not fix the problem.'
+                      : 'The refresh check was not completed.'
+
+              } else {
+                feedback.textContent =
+                  answer === 'yes'
+                    ? check.success
+                    : 'We can continue without completing that check.'
+              }
+
+              container.prepend(feedback)
+            }
+          })
       })
     })
+
   }
 
   if (isHighRisk(conversation)) {
@@ -1312,10 +1625,13 @@ function renderConversation(conversation) {
 
       <div id="email-options"></div>
 
-      <p class="plan-intro">
-        This is a rules-based preview. No website inspection,
-        booking, or message submission has occurred.
-      </p>
+     
+<p class="plan-intro">
+  This guidance is based on the information you provide.
+  SiteSidekick does not independently inspect your website,
+  book services, or send messages on your behalf.
+</p>
+
 
       <button type="button" class="secondary-button" id="new-session">
         Start another issue

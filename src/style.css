@@ -653,3 +653,1265 @@ textarea::placeholder { color: #a0a0a2; }
   margin: 0;
   line-height: 1.65;
 }
+
+/* SiteSidekick | TB Designs branding */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #BD2F37;
+  color: #fff;
+  font-weight: 800;
+  font-size: 24px;
+}
+
+.ssk-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.ssk-brand-text strong {
+  font-size: 21px;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  color: #fff;
+}
+
+.ssk-brand-text small {
+  font-size: 11px;
+  line-height: 1.3;
+  color: #d5d9e0;
+  letter-spacing: 0.2px;
+}
+
+@media (max-width: 480px) {
+  .ssk-brand-text strong {
+    font-size: 18px;
+  }
+
+  .ssk-brand-text small {
+    font-size: 10px;
+  }
+}
+
+/* =============================================================
+   SITESIDEKICK | TB DESIGNS — CUSTOMER-FACING VISUAL REDESIGN
+   Design-only overrides. Keep existing app selectors and logic.
+   ============================================================= */
+
+:root {
+  --red: #bd2f37;
+  --border: #e2e5e9;
+  --muted: #627184;
+  --ssk-ink: #182438;
+  --ssk-slate: #3b526c;
+  --ssk-paper: #f5f6f8;
+  color: var(--ssk-ink);
+  background: var(--ssk-paper);
+}
+
+body {
+  background: var(--ssk-paper);
+  color: var(--ssk-ink);
+}
+
+/* DARK SIDEBAR */
+
+.sidebar {
+  background: linear-gradient(
+    165deg,
+    #202c3e 0%,
+    #162133 68%,
+    #111c2b 100%
+  );
+  border-right: 1px solid #334154;
+  color: #f7f9fc;
+  box-shadow: 8px 0 28px rgba(13, 24, 41, .07);
+}
+
+.brand {
+  color: #fff;
+  margin-bottom: 34px;
+}
+
+.brand-mark {
+  background: var(--red);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(189, 47, 55, .26);
+}
+
+.ssk-brand-text strong {
+  color: #fff;
+}
+
+.ssk-brand-text small {
+  color: #d7e0eb;
+}
+
+/* SIDEBAR NAVIGATION */
+
+.nav-label {
+  color: #a8b5c5;
+}
+
+.nav-link {
+  color: #d3dce8;
+  transition: color .15s, background .15s;
+}
+
+.nav-link:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, .10);
+}
+
+.nav-link.active {
+  color: #fff;
+  background: rgba(189, 47, 55, .30);
+  box-shadow: inset 3px 0 0 #e35b64;
+}
+
+.new-issue {
+  box-shadow: 0 5px 14px rgba(189, 47, 55, .18);
+}
+
+/* SIDEBAR HELP CARD */
+
+.sidebar .help-card {
+  background: rgba(255, 255, 255, .065);
+  border-color: rgba(255, 255, 255, .13);
+  color: #fff;
+}
+
+.sidebar .help-card p {
+  color: #cad4e1;
+}
+
+/* SIDEBAR PROFILE */
+
+.sidebar .profile {
+  border-top-color: rgba(255, 255, 255, .16);
+}
+
+.sidebar .profile strong {
+  color: #fff;
+}
+
+.sidebar .profile small {
+  color: #c1ccda;
+}
+
+.sidebar .avatar {
+  background: #f7dfe0;
+  color: #82242a;
+}
+
+/* MAIN CONTENT */
+
+.main-content {
+  max-width: 1700px;
+}
+
+.welcome {
+  padding-top: 58px;
+}
+
+.welcome h1 {
+  color: #17283d;
+  font-weight: 800;
+  letter-spacing: -1.6px;
+}
+
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 1.8px;
+}
+
+.intro {
+  color: #56677b;
+  font-size: 15px;
+}
+
+/* PANELS AND CARDS */
+
+.issue-panel,
+.troubleshoot-result,
+.suggestion,
+.ssk-ai-panel,
+#ssk-business-guide {
+  border-color: #e0e5eb;
+  border-radius: 16px;
+  box-shadow: 0 9px 28px rgba(24, 36, 56, .055);
+}
+
+.issue-panel,
+.troubleshoot-result {
+  padding: 28px;
+}
+
+.issue-panel label,
+.troubleshoot-result label {
+  color: #20334a;
+}
+
+/* INPUT FIELDS */
+
+textarea,
+select {
+  border-color: #cfd7e1;
+  border-radius: 9px;
+  background: #fff;
+  color: #20334a;
+}
+
+textarea:focus,
+select:focus {
+  border-color: #bd2f37;
+}
+
+/* PRIMARY BUTTONS */
+
+.new-issue,
+#start-button,
+#build-plan,
+.ssk-ai-button {
+  border-radius: 9px;
+  background: #bd2f37;
+  color: #fff;
+  font-weight: 700;
+}
+
+.new-issue:hover,
+#start-button:hover,
+#build-plan:hover,
+.ssk-ai-button:not(:disabled):hover {
+  background: #9f252d;
+}
+
+/* SUGGESTED ISSUES */
+
+.suggestions h2 {
+  color: #21344c;
+  font-size: 17px;
+}
+
+.suggestion {
+  border-radius: 12px;
+  transition:
+    border-color .15s,
+    box-shadow .15s,
+    transform .15s;
+}
+
+.suggestion:hover {
+  border-color: #d9a0a4;
+  box-shadow: 0 9px 23px rgba(24, 36, 56, .075);
+  transform: translateY(-1px);
+}
+
+.suggestion-icon {
+  background: #faeded;
+  border-radius: 10px;
+}
+
+.suggestion strong {
+  color: #21344c;
+  font-size: 12px;
+}
+
+.suggestion small {
+  color: #627184;
+}
+
+/* TROUBLESHOOTING RESULTS */
+
+.troubleshoot-result h2,
+#plan-output h3,
+.ssk-ai-heading h3 {
+  color: #172b42;
+}
+
+/* META AI ASSISTANCE */
+
+.ssk-ai-panel {
+  border-top: 3px solid #bd2f37;
+}
+
+.ssk-ai-eyebrow {
+  color: #bd2f37;
+}
+
+.ssk-ai-provider {
+  background: #f8e9eb;
+  color: #84272e;
+}
+
+.ssk-ai-info,
+#ssk-business-guide-button {
+  background: #f4f6f9;
+  border-color: #dfe5ec;
+}
+
+/* BUSINESS GUIDE */
+
+#ssk-business-guide-button {
+  color: #1d334a;
+}
+
+#ssk-business-guide-button:hover {
+  border-color: #bd2f37;
+}
+
+.ssk-business-guide-content h4 {
+  color: #1d334a;
+}
+
+/* FOOTER */
+
+.page-footer {
+  background: #eef1f5;
+  border-top-color: #dce2e9;
+  border-radius: 14px 14px 0 0;
+}
+
+.ssk-footer-brand strong,
+.ssk-footer-legal h2 {
+  color: #1c3047;
+}
+
+.ssk-footer-legal a {
+  color: #a3262e;
+}
+
+.ssk-footer-notice {
+  border-color: #dfe4ea;
+}
+
+/* TABLET */
+
+@media (max-width: 900px) {
+  .brand {
+    gap: 9px;
+  }
+
+  .ssk-brand-text strong {
+    font-size: 18px;
+  }
+
+  .ssk-brand-text small {
+    font-size: 10px;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 650px) {
+  .sidebar {
+    background: #1b293c;
+    border-bottom-color: #34435a;
+    box-shadow: none;
+  }
+
+  .brand {
+    margin-bottom: 13px;
+  }
+
+  .welcome {
+    padding-top: 36px;
+  }
+
+  .issue-panel,
+  .troubleshoot-result {
+    padding: 18px;
+  }
+
+  .suggestion:hover {
+    transform: none;
+  }
+
+  .page-footer {
+    border-radius: 12px 12px 0 0;
+  }
+}
+
+/* ACCESSIBILITY: REDUCED MOTION */
+
+@media (prefers-reduced-motion: reduce) {
+  .suggestion,
+  .nav-link {
+    transition: none;
+  }
+
+  .suggestion:hover {
+    transform: none;
+  }
+}
+
+/* =====================================================
+   SITESIDEKICK | LOGO + HOMEPAGE REFINEMENTS
+   ===================================================== */
+
+/* Logo and wordmark */
+
+.sidebar .brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 28px;
+  padding: 8px 0;
+  text-align: center;
+}
+
+.ssk-logo {
+  display: block;
+  width: 138px;
+  max-width: 100%;
+  line-height: 0;
+}
+
+.ssk-logo svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.sidebar .ssk-brand-text {
+  align-items: center;
+  gap: 6px;
+}
+
+.sidebar .ssk-brand-text strong {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.9px;
+}
+
+.sidebar .ssk-brand-text small {
+  color: #d2dbe7;
+  font-size: 11px;
+  letter-spacing: 0.25px;
+}
+
+/* Homepage content */
+
+.main-content {
+  padding-top: 14px;
+}
+
+.welcome {
+  max-width: 860px;
+  padding-top: 48px;
+  padding-bottom: 30px;
+}
+
+.welcome .eyebrow {
+  color: #bd2f37;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.7px;
+  text-transform: uppercase;
+}
+
+.welcome h1 {
+  max-width: 900px;
+  color: #182438;
+  font-size: clamp(36px, 4.5vw, 58px);
+  line-height: 1.12;
+  letter-spacing: -2px;
+  font-weight: 800;
+}
+
+.welcome .intro {
+  max-width: 750px;
+  color: #526174;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+/* Main issue form */
+
+.issue-panel {
+  border: 1px solid #dfe5ec;
+  border-radius: 18px;
+  padding: 30px;
+  background: #fff;
+  box-shadow: 0 12px 35px rgba(24, 36, 56, 0.07);
+}
+
+.issue-panel label {
+  color: #182438;
+  font-size: 17px;
+  font-weight: 750;
+}
+
+.issue-panel textarea {
+  min-height: 135px;
+  font-size: 14px;
+  line-height: 1.7;
+  border-radius: 12px;
+}
+
+/* Suggested issue cards */
+
+.suggestions {
+  margin-top: 44px;
+}
+
+.suggestions h2 {
+  font-size: 22px;
+  color: #182438;
+  letter-spacing: -0.6px;
+}
+
+.suggestion-grid {
+  gap: 16px;
+}
+
+.suggestion {
+  min-height: 106px;
+  padding: 20px;
+  border-radius: 14px;
+  align-items: flex-start;
+}
+
+.suggestion-icon {
+  width: 42px;
+  height: 42px;
+  flex-basis: 42px;
+  font-size: 20px;
+}
+
+.suggestion strong {
+  font-size: 13px;
+  color: #182438;
+}
+
+.suggestion small {
+  font-size: 11px;
+  color: #667487;
+}
+
+/* Button polish */
+
+.new-issue,
+#start-button,
+#build-plan {
+  border-radius: 10px;
+  font-weight: 750;
+  box-shadow: 0 4px 12px rgba(189, 47, 55, 0.12);
+}
+
+/* Tablet */
+
+@media (max-width: 900px) {
+  .ssk-logo {
+    width: 108px;
+  }
+
+  .sidebar .ssk-brand-text strong {
+    font-size: 20px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 650px) {
+  .sidebar .brand {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+
+  .ssk-logo {
+    width: 75px;
+    flex-shrink: 0;
+  }
+
+  .sidebar .ssk-brand-text {
+    align-items: flex-start;
+  }
+
+  .sidebar .ssk-brand-text strong {
+    font-size: 19px;
+  }
+
+  .welcome {
+    padding-top: 28px;
+  }
+
+  .welcome h1 {
+    font-size: clamp(32px, 8vw, 42px);
+    letter-spacing: -1.2px;
+  }
+
+  .issue-panel {
+    padding: 20px;
+  }
+
+  .suggestion-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .suggestion {
+    min-height: 0;
+    padding: 16px;
+  }
+}
+
+/* =====================================================
+   SITESIDEKICK | FINAL INTERFACE POLISH
+   ===================================================== */
+
+/* Navigation */
+
+.sidebar .nav-link {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 550;
+}
+
+.sidebar .nav-link:hover {
+  background: rgba(255,255,255,.12);
+  color: #fff;
+}
+
+.sidebar .nav-link.active {
+  background: rgba(189,47,55,.35);
+  color: #fff;
+  font-weight: 750;
+}
+
+/* Main content rhythm */
+
+.main-content {
+  padding-bottom: 30px;
+}
+
+.welcome {
+  margin-bottom: 5px;
+}
+
+.welcome h1 {
+  text-wrap: balance;
+}
+
+.intro {
+  text-wrap: pretty;
+}
+
+/* Form improvements */
+
+.issue-panel textarea {
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.issue-panel textarea:focus {
+  border-color: #bd2f37;
+  box-shadow: 0 0 0 4px rgba(189,47,55,.10);
+  outline: none;
+}
+
+.input-footer {
+  margin-top: 20px;
+}
+
+#start-button {
+  min-height: 46px;
+  padding: 13px 20px;
+}
+
+/* Suggested issue cards */
+
+.suggestion {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.suggestion::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #bd2f37;
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform .2s ease;
+}
+
+.suggestion:hover::before,
+.suggestion:focus-visible::before {
+  transform: scaleY(1);
+}
+
+.suggestion:focus-visible {
+  outline: 3px solid #d98b90;
+  outline-offset: 3px;
+}
+
+/* Results */
+
+.troubleshoot-result {
+  border-top: 3px solid #bd2f37;
+}
+
+.notice {
+  border-radius: 12px;
+}
+
+.action-list li {
+  padding-bottom: 15px;
+}
+
+/* Secondary buttons */
+
+.secondary-button {
+  border-radius: 9px;
+  transition: background .15s ease, border-color .15s ease;
+}
+
+.secondary-button:hover {
+  background: #fbefef;
+  border-color: #bd2f37;
+}
+
+/* Footer */
+
+.page-footer {
+  margin-top: 65px;
+}
+
+/* Mobile */
+
+@media (max-width: 650px) {
+  .main-content {
+    padding-bottom: 15px;
+  }
+
+  .welcome h1 {
+    text-wrap: wrap;
+  }
+
+  .input-footer {
+    gap: 12px;
+  }
+
+  .page-footer {
+    margin-top: 40px;
+  }
+}
+
+/* Respect reduced-motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+  .suggestion::before,
+  .issue-panel textarea,
+  .secondary-button {
+    transition: none;
+  }
+}
+
+/* ==========================================================
+   SITESIDEKICK | SIGNATURE DESIGN DETAILS
+   TB Designs: Midnight Blue + Signature Red
+   ========================================================== */
+
+/* 1. Subtle technical grid behind the main content */
+
+.main-content {
+  position: relative;
+  background-image:
+    linear-gradient(rgba(24, 36, 56, .025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24, 36, 56, .025) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: center top;
+}
+
+/* 2. More intentional hero typography */
+
+.welcome {
+  position: relative;
+}
+
+.welcome .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.welcome .eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 3px;
+  border-radius: 3px;
+  background: #bd2f37;
+}
+
+.welcome h1 {
+  max-width: 800px;
+  letter-spacing: -2.2px;
+}
+
+.welcome .intro {
+  border-left: 3px solid #bd2f37;
+  padding-left: 18px;
+}
+
+/* 3. Signature red accent on the issue form */
+
+.issue-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.issue-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    #bd2f37 0%,
+    #e36b73 50%,
+    #bd2f37 100%
+  );
+}
+
+/* 4. Better button treatment */
+
+#start-button,
+#build-plan,
+.new-issue {
+  transition:
+    background .2s ease,
+    box-shadow .2s ease,
+    transform .2s ease;
+}
+
+#start-button:not(:disabled):hover,
+#build-plan:not(:disabled):hover,
+.new-issue:not(:disabled):hover {
+  background: #a72830;
+  box-shadow: 0 8px 18px rgba(189, 47, 55, .22);
+  transform: translateY(-1px);
+}
+
+/* 5. More personality in suggestion cards */
+
+.suggestion {
+  background: linear-gradient(
+    145deg,
+    #ffffff 0%,
+    #fafbfc 100%
+  );
+}
+
+.suggestion-icon {
+  border: 1px solid #f0d9db;
+  box-shadow: 0 3px 8px rgba(189, 47, 55, .06);
+}
+
+.suggestion-arrow {
+  color: #bd2f37;
+  font-weight: 800;
+}
+
+/* 6. Sidebar details */
+
+.sidebar .nav-label {
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.sidebar .nav-label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 26px;
+  height: 2px;
+  background: #bd2f37;
+}
+
+.sidebar .help-card {
+  border-left: 3px solid #bd2f37;
+}
+
+.sidebar .profile {
+  padding-top: 18px;
+}
+
+/* 7. Make section headings feel cohesive */
+
+.suggestions h2,
+.troubleshoot-result h2,
+#plan-output h3 {
+  font-weight: 800;
+  letter-spacing: -.5px;
+}
+
+/* 8. Accessible interactions */
+
+a,
+button,
+textarea,
+select {
+  -webkit-tap-highlight-color: rgba(189, 47, 55, .12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #start-button,
+  #build-plan,
+  .new-issue {
+    transition: none;
+  }
+
+  #start-button:hover,
+  #build-plan:hover,
+  .new-issue:hover {
+    transform: none;
+  }
+}
+
+/* 9. Mobile refinements */
+
+@media (max-width: 650px) {
+  .main-content {
+    background-size: 24px 24px;
+  }
+
+  .welcome h1 {
+    letter-spacing: -1.2px;
+  }
+
+  .welcome .intro {
+    padding-left: 13px;
+  }
+}
+
+/* ============================================================
+   SITESIDEKICK | FINAL BRAND REFINEMENT
+   TB Designs | November 2026
+   ============================================================ */
+
+/* Consistent brand tokens */
+:root {
+  --ssk-navy: #182438;
+  --ssk-navy-light: #26374d;
+  --ssk-red: #bd2f37;
+  --ssk-red-hover: #a3262e;
+  --ssk-text: #203149;
+  --ssk-muted: #58697d;
+  --ssk-border: #e1e6ed;
+  --ssk-surface: #ffffff;
+  --ssk-radius: 14px;
+}
+
+/* Refined page layout */
+.main-content {
+  width: auto;
+  min-width: 0;
+}
+
+.main-content > section {
+  scroll-margin-top: 24px;
+}
+
+/* Sidebar: premium dark finish */
+.sidebar {
+  background: linear-gradient(
+    180deg,
+    #1e2d43 0%,
+    #182438 55%,
+    #111b2b 100%
+  );
+}
+
+.sidebar .brand {
+  padding-bottom: 22px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+
+.sidebar .ssk-brand-text small {
+  font-weight: 500;
+  letter-spacing: .35px;
+}
+
+/* Navigation states */
+.sidebar .nav-link {
+  border: 1px solid transparent;
+}
+
+.sidebar .nav-link:hover {
+  border-color: rgba(255,255,255,.10);
+}
+
+.sidebar .nav-link.active {
+  border-color: rgba(255,255,255,.10);
+  box-shadow: inset 3px 0 0 #e75b65;
+}
+
+/* Main welcome area */
+.welcome {
+  max-width: 900px;
+}
+
+.welcome h1 {
+  color: var(--ssk-navy);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.welcome .intro {
+  color: var(--ssk-muted);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+/* Unified card styling */
+.issue-panel,
+.troubleshoot-result,
+.suggestion,
+.ssk-ai-panel,
+#ssk-business-guide {
+  background-color: var(--ssk-surface);
+  border: 1px solid var(--ssk-border);
+  box-shadow:
+    0 2px 4px rgba(24,36,56,.025),
+    0 12px 28px rgba(24,36,56,.045);
+}
+
+/* Main troubleshooting form */
+.issue-panel {
+  border-radius: 18px;
+}
+
+.issue-panel textarea,
+.troubleshoot-result textarea,
+.troubleshoot-result select {
+  font-size: 14px;
+  border-radius: 10px;
+  border-color: #cdd5df;
+}
+
+/* Consistent action buttons */
+.new-issue,
+#start-button,
+#build-plan,
+.ssk-ai-button:not(:disabled) {
+  background: var(--ssk-red);
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.new-issue:hover,
+#start-button:hover,
+#build-plan:hover,
+.ssk-ai-button:not(:disabled):hover {
+  background: var(--ssk-red-hover);
+}
+
+/* Suggestion cards */
+.suggestion {
+  border-radius: var(--ssk-radius);
+}
+
+.suggestion:hover {
+  border-color: #d49a9f;
+  background: #fff;
+}
+
+.suggestion strong {
+  color: var(--ssk-text);
+}
+
+.suggestion small {
+  color: var(--ssk-muted);
+}
+
+/* Results and generated guidance */
+.troubleshoot-result {
+  border-radius: 18px;
+  border-top: 3px solid var(--ssk-red);
+}
+
+#plan-output {
+  border-top-color: var(--ssk-border);
+}
+
+.action-list li {
+  color: var(--ssk-text);
+}
+
+/* AI section */
+.ssk-ai-panel {
+  border-radius: 18px;
+  border-top: 3px solid var(--ssk-red);
+}
+
+.ssk-ai-heading h3 {
+  color: var(--ssk-navy);
+}
+
+.ssk-ai-intro,
+.ssk-ai-status {
+  color: var(--ssk-muted);
+}
+
+.ssk-ai-response:not(:empty) {
+  background: #f7f9fb;
+  border-color: var(--ssk-border);
+}
+
+/* Footer consistency */
+.page-footer {
+  border: 1px solid #dce3eb;
+  border-radius: 16px;
+  background: #f0f3f7;
+}
+
+.ssk-footer-brand strong {
+  color: var(--ssk-navy);
+}
+
+.ssk-footer-legal a {
+  color: #a3262e;
+  text-underline-offset: 3px;
+}
+
+.ssk-footer-legal a:hover {
+  text-decoration: underline;
+}
+
+/* Consistent keyboard focus */
+button:focus-visible,
+a:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid #d98b90;
+  outline-offset: 3px;
+}
+
+/* Responsive refinements */
+@media (max-width: 900px) {
+  .welcome h1 {
+    font-size: clamp(32px, 4.5vw, 46px);
+  }
+}
+
+@media (max-width: 650px) {
+  .sidebar .brand {
+    padding-bottom: 12px;
+  }
+
+  .welcome h1 {
+    font-size: clamp(32px, 8vw, 42px);
+  }
+
+  .issue-panel,
+  .troubleshoot-result,
+  .ssk-ai-panel {
+    border-radius: 14px;
+  }
+
+  .page-footer {
+    border-radius: 12px;
+  }
+}
+
+/* ==================================================
+   SITESIDEKICK | ANSWER CONFIRMATION
+   ================================================== */
+
+.ssk-answer-confirmation {
+  margin: 18px 0;
+  padding: 20px;
+  background: #f5f7fa;
+  border: 1px solid #dce3eb;
+  border-left: 4px solid #bd2f37;
+  border-radius: 12px;
+}
+
+.ssk-confirm-label {
+  margin: 0 0 8px;
+  color: #bd2f37 !important;
+  font-size: 11px !important;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+}
+
+.ssk-confirm-answer {
+  margin: 0 0 12px;
+  color: #182438 !important;
+  font-size: 17px !important;
+  font-weight: 750;
+  line-height: 1.5;
+}
+
+.ssk-confirm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.ssk-confirm-continue {
+  background: #bd2f37;
+  border-color: #bd2f37;
+  color: #fff;
+}
+
+.ssk-confirm-continue:hover {
+  background: #a3262e;
+  color: #fff;
+}
+
+.ssk-check-feedback {
+  margin: 12px 0 18px;
+  padding: 14px 16px;
+  background: #edf3f8;
+  border-left: 3px solid #3b526c;
+  border-radius: 8px;
+  color: #203149 !important;
+  font-weight: 600;
+}
+
+[data-check]:disabled {
+  opacity: .55;
+  cursor: default;
+}
+
+@media (max-width: 650px) {
+  .ssk-confirm-actions {
+    flex-direction: column;
+  }
+
+  .ssk-confirm-actions button {
+    width: 100%;
+  }
+}
