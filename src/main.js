@@ -2278,7 +2278,7 @@ let siteSidekickAIRequestPending = false
 
 async function checkSiteSidekickAI(conversation = null) {
   try {
-    const response = await fetch('/api/health')
+const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/api/health`)
 
     if (!response.ok) {
       throw new Error('Backend unavailable')
@@ -2472,14 +2472,14 @@ IMPORTANT RULES:
       }
     ]
 
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ messages })
-      })
+try {
+  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/api/chat`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ messages })
+  })
 
       const data = await response.json()
 
