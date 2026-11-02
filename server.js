@@ -274,8 +274,19 @@ if (typeof reply !== 'string' || !reply.trim()) {
   }
 });
 
-app.listen(PORT, '127.0.0.1', () => {
-  console.log(`SiteSidekick backend running at http://localhost:${PORT}`);
+
+app.get('/healthz', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    service: 'SiteSidekick API'
+  });
+});
+
+const HOST = process.env.HOST || '0.0.0.0';
+const SERVER_PORT = Number(process.env.PORT) || PORT;
+
+app.listen(SERVER_PORT, HOST, () => {
+  console.log(`SiteSidekick backend running on port ${SERVER_PORT}`);
   console.log(
     `Live Meta AI: ${AI_ENABLED ? 'ENABLED' : 'DISABLED'}`
   );
